@@ -3,21 +3,31 @@ package com.example.whizzapp;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Registration extends AppCompatActivity {
     ImageView backIcon;
     private EditText editTextName, editTextSurname, editTextEmail, editTextPassword, editTextConfirmPassword;
     MaterialCardView firstnameFrame, secondnameFrame, passwordFrame, emailFrame, passwordRepeatFrame;
     MaterialCardView regButton;
+    private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +41,9 @@ public class Registration extends AppCompatActivity {
                 finish();
             }
         });
+
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         editTextName = findViewById(R.id.first_name_edit_text);
         editTextSurname = findViewById(R.id.second_name_edit_text);
@@ -53,21 +66,18 @@ public class Registration extends AppCompatActivity {
         regButton.setOnClickListener(v -> registerUser());
     }
 
-    private void registerUser()
-    {
+    private void registerUser() {
         String name = editTextName.getText().toString().trim();
         String surname = editTextSurname.getText().toString().trim();
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
-        try
-        {
+        try {
             InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -114,7 +124,82 @@ public class Registration extends AppCompatActivity {
             editTextConfirmPassword.requestFocus();
             return;
         }
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        User user = new User(name, surname, email);
+                        Log.d("Registration", "Użytkownik został utworzony: " + user.toString());
+
+                        db.collection("users")
+                                .document(mAuth.getCurrentUser().getUid())
+                                .set(user)
+                                .addOnSuccessListener(aVoid -> {
+                                    sendEmailVerification();
+                                    Toast.makeText(Registration.this, "Rejestracja udana!", Toast.LENGTH_SHORT).show();
+                                    Log.d("Registration", "Dane zostały zapisane do Firestore.");
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(Registration.this, "Błąd podczas dodawania danych do Firestore", Toast.LENGTH_SHORT).show();
+                                    Log.e("Registration", "Błąd podczas zapisu do Firestore.", e);
+                                });
+                    } else {
+                        Toast.makeText(Registration.this, "Rejestracja nieudana! Spróbuj ponownie.", Toast.LENGTH_SHORT).show();
+                        Log.e("Registration", "Błąd podczas tworzenia użytkownika Firebase.", task.getException());
+                    }
+                });
+
     }
+
+    private void sendEmailVerification() {
+        FirebaseUser user = mAuth.getCurrentUser();
+
+        if (user != null) {
+            user.sendEmailVerification()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(Registration.this, "Wiadomość z weryfikacją adresu e-mail została wysłana.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(Registration.this, "Nie udało się wysłać wiadomości z weryfikacją e-mail.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+    }
+
+    class User
+    {
+        private String name;
+        private String surname;
+        private String email;
+
+        public User() {};
+
+        public User(String name, String surname, String email)
+        {
+            this.name = name;
+            this.surname = surname;
+            this.email = email;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getSurname() {
+            return surname;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+    }
+
 
     private void setFocusChangeListenerForCard(MaterialCardView cardView, int editTextId) {
         EditText editText = findViewById(editTextId);
