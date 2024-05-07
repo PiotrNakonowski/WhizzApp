@@ -1,5 +1,6 @@
 package com.example.whizzapp;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -15,12 +16,14 @@ public class MainActivity extends AppCompatActivity {
     MaterialCardView login_button;
     MaterialCardView login_frame;
     MaterialCardView password_frame;
+    MaterialCardView registerButton;
     private EditText editTextEmail, editTextPassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        registerButton = findViewById(R.id.register_button);
 
         editTextEmail = findViewById(R.id.emailEditText);
         editTextPassword = findViewById(R.id.passwordEditText);
@@ -30,6 +33,15 @@ public class MainActivity extends AppCompatActivity {
 
         setFocusChangeListenerForCard(login_frame, R.id.emailEditText);
         setFocusChangeListenerForCard(password_frame, R.id.passwordEditText);
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Registration.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         login_button.setOnClickListener(v -> loginUser());
     }
