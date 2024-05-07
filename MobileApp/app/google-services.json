@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "179971525300",
+    "project_id": "myapp-e50c4",
+    "storage_bucket": "myapp-e50c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:179971525300:android:2f1f58e5f48037508e65e1",
+        "android_client_info": {
+          "package_name": "com.example.myapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARZYlS4PK8gaUgB8dXt5UdorBdkmu_Zd8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:179971525300:android:602caf68833e2ab28e65e1",
+        "android_client_info": {
+          "package_name": "com.example.whizzapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARZYlS4PK8gaUgB8dXt5UdorBdkmu_Zd8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
