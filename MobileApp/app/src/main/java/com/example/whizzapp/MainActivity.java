@@ -7,32 +7,48 @@ import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
-    MaterialCardView login_button;
-    MaterialCardView login_frame;
-    MaterialCardView password_frame;
+    MaterialCardView loginButton;
+    MaterialCardView loginFrame;
+    MaterialCardView passwordFrame;
     MaterialCardView registerButton;
     private EditText editTextEmail, editTextPassword;
+    private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        registerButton = findViewById(R.id.register_button);
+        mAuth = FirebaseAuth.getInstance(); //Polaczenie z baza, przyda sie do logowania
 
+        registerButton = findViewById(R.id.register_button);
         editTextEmail = findViewById(R.id.emailEditText);
         editTextPassword = findViewById(R.id.passwordEditText);
-        login_button = findViewById(R.id.loginButton);
-        login_frame = findViewById(R.id.inputframe_login);
-        password_frame = findViewById(R.id.inputframe_password);
+        loginButton = findViewById(R.id.loginButton);
+        loginFrame = findViewById(R.id.inputframe_login);
+        passwordFrame = findViewById(R.id.inputframe_password);
 
-        setFocusChangeListenerForCard(login_frame, R.id.emailEditText);
-        setFocusChangeListenerForCard(password_frame, R.id.passwordEditText);
+        //LOGOWANIE AUTOMATYCZNE JEZELI UZYTKOWNIK JEST ZALOGOWANY
+
+        if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified()) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class)); //TUTAJ ZMIENIC NA STRONE GLOWNA
+            finish();
+            return;
+        }
+
+        //LOGOWANIE AUTOMATYCZNE JEZELI UZYTKOWNIK JEST ZALOGOWANY
+
+
+        setFocusChangeListenerForCard(loginFrame, R.id.emailEditText);
+        setFocusChangeListenerForCard(passwordFrame, R.id.passwordEditText);
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        login_button.setOnClickListener(v -> loginUser());
+        loginButton.setOnClickListener(v -> loginUser());
     }
 
     private void loginUser() {
@@ -77,6 +93,26 @@ public class MainActivity extends AppCompatActivity {
             editTextPassword.requestFocus();
             return;
         }
+
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null && user.isEmailVerified()) {
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class); // TUTAJ ZMIENIC NA STRONE GLOWNA, PO UDANYM LOGOWANIU
+                            intent.putExtra("userId", user.getUid());
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            startActivity(intent);
+                            finish();
+                        }
+                        else {
+                            Toast.makeText(MainActivity.this, "Potwierdź swój adres e-mail, aby się zalogować.", Toast.LENGTH_SHORT).show();
+                            mAuth.signOut();
+                        }
+                    } else {
+                        Toast.makeText(MainActivity.this, "Logowanie nieudane! Spróbuj ponownie.", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void setFocusChangeListenerForCard(MaterialCardView cardView, int editTextId) {
