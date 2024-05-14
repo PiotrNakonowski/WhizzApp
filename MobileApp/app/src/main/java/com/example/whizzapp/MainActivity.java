@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         //LOGOWANIE AUTOMATYCZNE JEZELI UZYTKOWNIK JEST ZALOGOWANY
 
         if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified()) {
-            startActivity(new Intent(getApplicationContext(), MainActivity.class)); //TUTAJ ZMIENIC NA STRONE GLOWNA
+            startActivity(new Intent(getApplicationContext(), Homepage.class)); //TUTAJ ZMIENIC NA STRONE GLOWNA
             finish();
             return;
         }
