@@ -1,0 +1,37 @@
+.sidebar {
+  flex: 1;
+  min-height: 100vh;
+  min-width: 230px;
+  background-color: #616161;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: flex;
+      padding-top: 40px;
+      padding-left: 30px;
+      cursor: pointer;
+      
+      /*
+      &:hover {
+        background-color: #727171;
+      }
+      */
+      .icon {
+        font-size: 20px;
+        color: #F0F0F0;
+      }
+
+      span{
+          font-size: 20px;
+          font-weight: 700;
+          color: #F0F0F0;
+          margin-left: 10px;
+      }
+    }
+  }
+
+}

@@ -20,6 +20,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+
+
 public class Homepage extends AppCompatActivity {
     TextView textViewWelcome;
     private FirebaseAuth mAuth;
@@ -136,7 +138,7 @@ public class Homepage extends AppCompatActivity {
             }
         });
 
-        /*mapButton.setOnClickListener(new View.OnClickListener() {
+       /* mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentActivityClass != NavigationMap.class) {
@@ -150,7 +152,7 @@ public class Homepage extends AppCompatActivity {
             }
         });*/
 
-        /*todoButton.setOnClickListener(new View.OnClickListener() {
+       /* todoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentActivityClass != ToDoList.class) {
@@ -164,19 +166,15 @@ public class Homepage extends AppCompatActivity {
             }
         });*/
 
-        /*eventsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentActivityClass != Events.class) {
-                    Intent intent = new Intent(getApplicationContext(), Events.class);
-                    startActivity(intent);
-                    finish();
-                }
-                else {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                }
+        eventsButton.setOnClickListener(v -> {
+            if (currentActivityClass != Events.class) {
+                Intent newintent = new Intent(getApplicationContext(), Events.class);
+                startActivity(newintent);
+                finish();
+            } else {
+                drawerLayout.closeDrawer(GravityCompat.START);
             }
-        });*/
+        });
 
         /*helpButton.setOnClickListener(new View.OnClickListener() {
             @Override

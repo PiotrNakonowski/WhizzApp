@@ -4,9 +4,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="primary">#D87648</color>
     <color name="primary_background">#BBBCC0</color>
+    <color name="third_background">#AEAFB3</color>
+    <color name="secondary">#8B0D02</color>
     <color name="secondary_background">#D9D9D9</color>
     <color name="primary_stroke">#B7B7B7</color>
     <color name="input_color">#BBBBBB</color>
-    <color name="secondary">#8B0D02</color>
-    <color name="third_background">#AEAFB3</color>
+    <color name="error">#F00000</color>
 </resources>
