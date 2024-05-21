@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/primary_background"
+    tools:context=".AddSchoolSchedule">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/back_icon"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/baseline_keyboard_backspace_24"
+            android:layout_marginTop="27dp"
+            android:layout_marginStart="60dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintEnd_toEndOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.34"/>
+
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/open_sans_bold"
+            android:text="Dodaj plan lekcji"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.15" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/loginCardView"
+        android:layout_width="322dp"
+        android:layout_height="611dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="136dp"
+        android:layout_marginEnd="16dp"
+        app:cardBackgroundColor="@color/secondary_background"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="186dp"
+            android:layout_height="32dp"
+            android:layout_gravity="start"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="19dp"
+            android:padding="16dp"
+            app:cardBackgroundColor="@color/third_background"
+            app:cardCornerRadius="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Plan na poniedziałek"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/inputframeMondaySchedule"
+            android:layout_width="295dp"
+            android:layout_height="54dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="58dp"
+            android:padding="16dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="12dp"
+            app:strokeColor="#B7B7B7"
+            app:strokeWidth="2dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/mondayButton"
+                android:layout_width="126dp"
+                android:layout_height="32dp"
+                android:layout_gravity="start"
+                android:layout_marginTop="11dp"
+                android:layout_marginStart="10dp"
+                android:padding="16dp"
+                app:cardBackgroundColor="@color/secondary"
+                app:cardCornerRadius="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:text="Dodaj zdjęcie"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Pole do wprowadzania tekstu na e-mail -->
+            <TextView
+                android:id="@+id/mondayFilename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:background="@null"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Brak pliku"
+                android:paddingStart="16dp"
+                android:layout_marginEnd="5dp"
+                android:textSize="16sp"
+                android:paddingEnd="16dp"
+                android:textColor="#BBBBBB"
+                android:textColorHint="#BBBBBB" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="186dp"
+            android:layout_height="32dp"
+            android:layout_gravity="start"
+            android:layout_marginTop="122dp"
+            android:layout_marginStart="19dp"
+            android:padding="16dp"
+            app:cardBackgroundColor="@color/third_background"
+            app:cardCornerRadius="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Plan na wtorek"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/inputframeTuesdaySchedule"
+            android:layout_width="295dp"
+            android:layout_height="54dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="164dp"
+            android:padding="16dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="12dp"
+            app:strokeColor="#B7B7B7"
+            app:strokeWidth="2dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/tuesdayButton"
+            android:layout_width="126dp"
+            android:layout_height="32dp"
+            android:layout_gravity="start"
+            android:layout_marginTop="11dp"
+            android:layout_marginStart="10dp"
+            android:padding="16dp"
+            app:cardBackgroundColor="@color/secondary"
+            app:cardCornerRadius="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Dodaj zdjęcie"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/TuesdayFilename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:background="@null"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Brak pliku"
+                android:paddingStart="16dp"
+                android:layout_marginEnd="5dp"
+                android:textSize="16sp"
+                android:paddingEnd="16dp"
+                android:textColor="#BBBBBB"
+                android:textColorHint="#BBBBBB" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="186dp"
+            android:layout_height="32dp"
+            android:layout_gravity="start"
+            android:layout_marginTop="228dp"
+            android:layout_marginStart="19dp"
+            android:padding="16dp"
+            app:cardBackgroundColor="@color/third_background"
+            app:cardCornerRadius="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Plan na środę"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/inputframeWednesdaySchedule"
+            android:layout_width="295dp"
+            android:layout_height="54dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="270dp"
+            android:padding="16dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="12dp"
+            app:strokeColor="#B7B7B7"
+            app:strokeWidth="2dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/wednesdayButton"
+                android:layout_width="126dp"
+                android:layout_height="32dp"
+                android:layout_gravity="start"
+                android:layout_marginTop="11dp"
+                android:layout_marginStart="10dp"
+                android:padding="16dp"
+                app:cardBackgroundColor="@color/secondary"
+                app:cardCornerRadius="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:text="Dodaj zdjęcie"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/WednesdayFilename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:background="@null"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Brak pliku"
+                android:paddingStart="16dp"
+                android:layout_marginEnd="5dp"
+                android:textSize="16sp"
+                android:paddingEnd="16dp"
+                android:textColor="#BBBBBB"
+                android:textColorHint="#BBBBBB" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="186dp"
+            android:layout_height="32dp"
+            android:layout_gravity="start"
+            android:layout_marginTop="334dp"
+            android:layout_marginStart="19dp"
+            android:padding="16dp"
+            app:cardBackgroundColor="@color/third_background"
+            app:cardCornerRadius="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Plan na czwartek"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/inputframeThursdaySchedule"
+            android:layout_width="295dp"
+            android:layout_height="54dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="376dp"
+            android:padding="16dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="12dp"
+            app:strokeColor="#B7B7B7"
+            app:strokeWidth="2dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/thursdayButton"
+                android:layout_width="126dp"
+                android:layout_height="32dp"
+                android:layout_gravity="start"
+                android:layout_marginTop="11dp"
+                android:layout_marginStart="10dp"
+                android:padding="16dp"
+                app:cardBackgroundColor="@color/secondary"
+                app:cardCornerRadius="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:text="Dodaj zdjęcie"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/ThursdayFilename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:background="@null"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Brak pliku"
+                android:paddingStart="16dp"
+                android:layout_marginEnd="5dp"
+                android:textSize="16sp"
+                android:paddingEnd="16dp"
+                android:textColor="#BBBBBB"
+                android:textColorHint="#BBBBBB" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="186dp"
+            android:layout_height="32dp"
+            android:layout_gravity="start"
+            android:layout_marginTop="440dp"
+            android:layout_marginStart="19dp"
+            android:padding="16dp"
+            app:cardBackgroundColor="@color/third_background"
+            app:cardCornerRadius="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Plan na czwartek"
+                android:textColor="#000000"
+                android:textSize="16sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/inputframeFridaySchedule"
+            android:layout_width="295dp"
+            android:layout_height="54dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="482dp"
+            android:padding="16dp"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="12dp"
+            app:strokeColor="#B7B7B7"
+            app:strokeWidth="2dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/fridayButton"
+                android:layout_width="126dp"
+                android:layout_height="32dp"
+                android:layout_gravity="start"
+                android:layout_marginTop="11dp"
+                android:layout_marginStart="10dp"
+                android:padding="16dp"
+                app:cardBackgroundColor="@color/secondary"
+                app:cardCornerRadius="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/open_sans_bold"
+                    android:text="Dodaj zdjęcie"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/FridayFilename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|end"
+                android:background="@null"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Brak pliku"
+                android:paddingStart="16dp"
+                android:layout_marginEnd="5dp"
+                android:textSize="16sp"
+                android:paddingEnd="16dp"
+                android:textColor="#BBBBBB"
+                android:textColorHint="#BBBBBB" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/sendButton"
+            android:layout_width="101dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="16dp"
+            app:cardBackgroundColor="@color/primary"
+            app:cardCornerRadius="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Zatwierdź"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,10 +33,22 @@
         <activity android:name=".Homepage"
             android:exported="false" />
 
+        <activity android:name=".SchoolSchedule"
+            android:exported="false" />
+
+        <activity android:name=".AddSchoolSchedule"
+            android:exported="false" />
+
+        <activity android:name=".BiggerImage"
+            android:exported="false" />
+
         <activity android:name=".Events"
             android:exported="false" />
 
         <activity android:name=".AddEvent"
+            android:exported="false" />
+
+        <activity android:name=".LoadingScreen"
             android:exported="false" />
 
         <meta-data

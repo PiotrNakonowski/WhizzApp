@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_background"
+    tools:context=".SchoolSchedule">
+
+    <include layout="@layout/activity_loading_screen"
+        android:id="@+id/loadingScreen"/>
+
+<androidx.drawerlayout.widget.DrawerLayout
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_background"
+    tools:context=".SchoolSchedule"
+    android:visibility="gone">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/mainContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/nav_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_gravity="start"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="@color/secondary_background"
+            app:cardCornerRadius="4dp"
+            app:strokeColor="@color/secondary_background">
+
+            <ImageView
+                android:id="@+id/hamburgerIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/burger_bar_black"
+                android:layout_gravity="center"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/addButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_gravity="end"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="@color/primary"
+            app:cardCornerRadius="4dp"
+            app:strokeColor="@color/primary">
+
+            <ImageView
+                android:id="@+id/addIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_add_24"
+                android:layout_gravity="center"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Plan lekcji"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="25dp"
+            android:fontFamily="@font/open_sans_bold"
+            android:textSize="24sp"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/welcomeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nie masz jeszcze dodanego planu lekcji :( \n Dodaj go za pomocą “+” znajdującego się powyżej."
+            android:layout_gravity="center|top"
+            android:layout_marginTop="100dp"
+            android:fontFamily="@font/open_sans"
+            android:textAlignment="center"
+            android:textSize="22sp"
+            android:textColor="@color/black"/>
+
+
+    </FrameLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="242dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/white"
+        app:itemTextAppearance="@style/NavigationMenuStyle"
+        app:itemTextColor="@color/primary">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/navButtonClose"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_gravity="start"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="@color/secondary_background"
+            app:cardCornerRadius="4dp"
+            app:strokeColor="@color/secondary_background">
+
+            <ImageView
+                android:id="@+id/closeIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/close"
+                android:layout_gravity="center"/>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/homeButton"
+            android:layout_width="139dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="100dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="16dp"
+            app:cardBackgroundColor="@color/white"
+            app:strokeColor="@color/white"
+            app:cardCornerRadius="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Home"
+                android:textColor="@color/primary"
+                android:textSize="18sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/schoolScheduleButton"
+            android:layout_width="139dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="150dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="16dp"
+            app:cardBackgroundColor="@color/white"
+            app:strokeColor="@color/white"
+            app:cardCornerRadius="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Plan lekcji"
+                android:textColor="@color/primary"
+                android:textSize="18sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mapButton"
+            android:layout_width="139dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="200dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="16dp"
+            app:cardBackgroundColor="@color/white"
+            app:strokeColor="@color/white"
+            app:cardCornerRadius="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Mapa"
+                android:textColor="@color/primary"
+                android:textSize="18sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/todoButton"
+            android:layout_width="139dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="250dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="16dp"
+            app:cardBackgroundColor="@color/white"
+            app:strokeColor="@color/white"
+            app:cardCornerRadius="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Lista TO-DO"
+                android:textColor="@color/primary"
+                android:textSize="18sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/eventsButton"
+            android:layout_width="139dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="300dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="16dp"
+            app:cardBackgroundColor="@color/white"
+            app:strokeColor="@color/white"
+            app:cardCornerRadius="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Wydarzenia"
+                android:textColor="@color/primary"
+                android:textSize="18sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <ImageView
+            android:id="@+id/logoutIcon"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/logout"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="20dp"/>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/helpButton"
+            android:layout_width="139dp"
+            android:layout_height="36dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="16dp"
+            android:layout_marginEnd="-20dp"
+            app:cardBackgroundColor="@color/white"
+            app:strokeColor="@color/white"
+            app:cardCornerRadius="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/open_sans_bold"
+                android:text="Pomoc"
+                android:textColor="@color/primary"
+                android:textSize="18sp" />
+        </com.google.android.material.card.MaterialCardView>
+
+    </com.google.android.material.navigation.NavigationView>
+
+</androidx.drawerlayout.widget.DrawerLayout>
+
+</RelativeLayout>
