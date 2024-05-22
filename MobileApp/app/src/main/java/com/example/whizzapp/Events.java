@@ -132,7 +132,7 @@ public class Events extends AppCompatActivity {
             }
         });
 
-        /*schoolScheduleButton.setOnClickListener(new View.OnClickListener() {
+        schoolScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentActivityClass != SchoolSchedule.class) {
@@ -145,34 +145,6 @@ public class Events extends AppCompatActivity {
                 }
             }
         });
-
-        mapButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentActivityClass != NavigationMap.class) {
-                    Intent intent = new Intent(getApplicationContext(), NavigationMap.class);
-                    startActivity(intent);
-                    finish();
-                }
-                else {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                }
-            }
-        });
-
-        todoButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentActivityClass != ToDoList.class) {
-                    Intent intent = new Intent(getApplicationContext(), ToDoList.class);
-                    startActivity(intent);
-                    finish();
-                }
-                else {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                }
-            }
-        });*/
 
         eventsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,22 +172,7 @@ public class Events extends AppCompatActivity {
             }
         });
 
-       /* helpButton.setOnClickListsener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (currentActivityClass != HelpReport.class) {
-                    Intent intent = new Intent(getApplicationContext(), HelpReport.class);
-                    startActivity(intent);
-                    finish();
-                }
-                else {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                }
-            }
-        });*/
 
-
-        //printEvents();
         logoutIcon.setOnClickListener(v -> logoutUser());
     }
 
@@ -259,7 +216,7 @@ public class Events extends AppCompatActivity {
 
                             ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(convertDpToPixel(322, getApplicationContext()), convertDpToPixel(178, getApplicationContext()));
 
-                            marginLayoutParams.setMargins((screenWidth / 2) - (convertDpToPixel(322, getApplicationContext()) / 2), convertDpToPixel(100 + (i * 178) + (i * 20), getApplicationContext()), 0, 0);
+                            marginLayoutParams.setMargins((screenWidth / 2) - (convertDpToPixel(322, getApplicationContext()) / 2), convertDpToPixel(100 + (i * 178) + (i * 20), getApplicationContext()), 0, (i * 20));
                             eventContainer.setLayoutParams(marginLayoutParams);
 
                             FrameLayout parentLayout = findViewById(R.id.mainContent);
@@ -333,10 +290,40 @@ public class Events extends AppCompatActivity {
                             eventContainer.addView(attendanceCounter);
                             //*******Attendance Counter*******
 
+                            DocumentReference docRef = document.getReference();
+                            FirebaseUser currentUser = mAuth.getCurrentUser();
+
+                            CollectionReference participantsRef = docRef.collection("Participants");
+
                             //*******joinButton*******
                             MaterialCardView joinButton = new MaterialCardView(Events.this);
-                            joinButton.setCardBackgroundColor(getColor(R.color.primary));
-                            joinButton.setStrokeColor(getColor(R.color.primary));
+
+                            TextView buttonText = new TextView(Events.this);
+
+                            participantsRef.whereEqualTo("UserId", currentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        if (!task.getResult().isEmpty()) {
+                                            joinButton.setCardBackgroundColor(getColor(R.color.third_background));
+                                            buttonText.setTextColor(getColor(R.color.black));
+                                            String buttonDescriptionText = "Dołączono";
+                                            buttonText.setText(buttonDescriptionText);
+                                        }else{
+                                            joinButton.setCardBackgroundColor(getColor(R.color.primary));
+                                            buttonText.setTextColor(getColor(R.color.white));
+                                            String buttonDescriptionText = "Zapisz się";
+                                            buttonText.setText(buttonDescriptionText);
+                                        }
+                                    }
+                                }
+                            });
+
+                            buttonText.setTypeface(typeface);
+                            buttonText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+                            joinButton.addView(buttonText);
+                            buttonText.setGravity(Gravity.CENTER);
+
                             joinButton.setRadius(convertDpToPixel(4, getApplicationContext()));
                             ViewGroup.MarginLayoutParams joinButtonLayoutParams = new ViewGroup.MarginLayoutParams(convertDpToPixel(90, getApplicationContext()), convertDpToPixel(30, getApplicationContext()));
                             joinButtonLayoutParams.setMargins(convertDpToPixel(22, getApplicationContext()), convertDpToPixel(130, getApplicationContext()), 0, 0);
@@ -344,11 +331,6 @@ public class Events extends AppCompatActivity {
                             joinButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    DocumentReference docRef = document.getReference();
-                                    FirebaseUser currentUser = mAuth.getCurrentUser();
-
-                                    CollectionReference participantsRef = docRef.collection("Participants");
-
                                     participantsRef.whereEqualTo("UserId", currentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -375,7 +357,7 @@ public class Events extends AppCompatActivity {
                                                     }
 
                                                     if (eventAttendanceCount >= Long.parseLong(data.get("MaxAttendance").toString())) {
-                                                        Toast.makeText(Events.this, "Event is full", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(Events.this, "Wydarzenie jest pełne", Toast.LENGTH_SHORT).show();
                                                     } else {
                                                         eventAttendanceCount++;
                                                         data.put("Attendance", String.valueOf(eventAttendanceCount));
@@ -383,15 +365,19 @@ public class Events extends AppCompatActivity {
                                                         docRef.set(data).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void aVoid) {
-                                                                String attendanceText = "Liczba osób " + data.get("Attendance").toString() + "/" + data.get("MaxAttendance").toString();
+                                                                String attendanceText = "Liczba chętnych: " + data.get("Attendance").toString() + "/" + data.get("MaxAttendance").toString();
                                                                 attendanceCounterButtonText.setText(attendanceText);
-                                                                Toast.makeText(Events.this, "Successfully joined the event!", Toast.LENGTH_SHORT).show();
+                                                                joinButton.setCardBackgroundColor(getColor(R.color.third_background));
+                                                                buttonText.setTextColor(getColor(R.color.black));
+                                                                String buttonDescriptionText = "Dołączono";
+                                                                buttonText.setText(buttonDescriptionText);
+                                                                Toast.makeText(Events.this, "Dołączono do wydarzenia!", Toast.LENGTH_SHORT).show();
                                                             }
                                                         }).addOnFailureListener(new OnFailureListener() {
                                                             @Override
                                                             public void onFailure(@NonNull Exception e) {
                                                                 Log.e("JoinButton", "Error updating attendance count", e);
-                                                                Toast.makeText(Events.this, "Failed to join the event. Please try again.", Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(Events.this, "Nie udało dołączyć się do wydarzenia. Spróbuj ponownie", Toast.LENGTH_SHORT).show();
                                                             }
                                                         });
                                                     }
@@ -404,14 +390,6 @@ public class Events extends AppCompatActivity {
                             });
 
 
-                            TextView buttonText = new TextView(Events.this);
-                            String buttonDescriptionText = "Zapisz się";
-                            buttonText.setText(buttonDescriptionText);
-                            buttonText.setTextColor(getColor(R.color.white));
-                            buttonText.setTypeface(typeface);
-                            buttonText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
-                            joinButton.addView(buttonText);
-                            buttonText.setGravity(Gravity.CENTER);
 
                             eventContainer.addView(joinButton);
                             //*******joinButton*******
