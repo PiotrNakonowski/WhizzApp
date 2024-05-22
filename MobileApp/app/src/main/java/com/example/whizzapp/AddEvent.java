@@ -35,13 +35,12 @@ public class AddEvent extends AppCompatActivity {
     private EditText eventTitle;
     private MaterialCardView inputFrameEventDescription;
     private EditText eventDescription;
-    private ImageView backIcon;
     private MaterialCardView addEventButton;
     private MaterialCardView addPhotoButton;
-    private MaterialCardView inputFramePhoto;
     private TextView addPhotoText;
+
+    private MaterialCardView inputFrameMaxAttendanceNumberInput;
     private EditText maxAttendanceNumberInput;
-    private FirebaseAuth mAuth;
     private Uri uri;
     private String fileName;
 
@@ -54,24 +53,13 @@ public class AddEvent extends AppCompatActivity {
 
         inputFrameEventTitle = findViewById(R.id.inputframeEventTitle);
         inputFrameEventDescription = findViewById(R.id.inputframeEventDescription);
-        backIcon = findViewById(R.id.back_icon);
         addEventButton = findViewById(R.id.sendButton);
         addPhotoButton = findViewById(R.id.addPhotoButton);
         addPhotoText = findViewById(R.id.addPhotoText);
         eventTitle = findViewById(R.id.eventTitle);
         eventDescription = findViewById(R.id.eventDescription);
-        inputFramePhoto = findViewById(R.id.inputframePhoto);
+        inputFrameMaxAttendanceNumberInput = findViewById(R.id.maxAttendanceNumber);
         maxAttendanceNumberInput = findViewById(R.id.maxAttendanceNumberText);
-        mAuth = FirebaseAuth.getInstance();
-
-      /*  backIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ToDoList.class);
-                startActivity(intent);
-                finish();
-            }
-        });*/
 
         addPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +117,16 @@ public class AddEvent extends AppCompatActivity {
     private void addEvent() {
         String title = eventTitle.getText().toString().trim();
         String description = eventDescription.getText().toString().trim();
-        long maxAttendanceNumber = Long.parseLong(maxAttendanceNumberInput.getText().toString().trim());
+        long maxAttendanceNumber;
+        try{
+            maxAttendanceNumber = Long.parseLong(maxAttendanceNumberInput.getText().toString().trim());
+        }catch (NumberFormatException e){
+            maxAttendanceNumberInput.setError("Zły format liczby!");
+            maxAttendanceNumberInput.requestFocus();
+            inputFrameMaxAttendanceNumberInput.setStrokeColor(getResources().getColor(R.color.error));
+            return;
+        }
+
         long attendance = 0;
 
         try {
@@ -156,6 +153,7 @@ public class AddEvent extends AppCompatActivity {
         }
 
 
+        long finalMaxAttendanceNumber = maxAttendanceNumber;
         sendImages(uri, fileName, new OnImageUploadListener() {
             @Override
             public void onImageUploadSuccess(String downloadUrl) {
@@ -169,7 +167,7 @@ public class AddEvent extends AppCompatActivity {
                 eventData.put("Description", description);
                 eventData.put("PhotoUrl", downloadUrl);
                 eventData.put("Attendance", attendance);
-                eventData.put("MaxAttendance", maxAttendanceNumber);
+                eventData.put("MaxAttendance", finalMaxAttendanceNumber);
                 eventCollectionRef.add(eventData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
