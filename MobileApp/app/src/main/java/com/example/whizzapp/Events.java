@@ -237,7 +237,6 @@ public class Events extends AppCompatActivity {
                             eventContainer.addView(title);
                             //*******Title*******
 
-
                             //*******Description*******
                             TextView description = new TextView(Events.this);
                             description.setText(data.get("Description").toString());
