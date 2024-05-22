@@ -22,11 +22,15 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,7 +42,7 @@ public class AddEvent extends AppCompatActivity {
     private MaterialCardView addEventButton;
     private MaterialCardView addPhotoButton;
     private TextView addPhotoText;
-
+    ImageView backIcon;
     private MaterialCardView inputFrameMaxAttendanceNumberInput;
     private EditText maxAttendanceNumberInput;
     private Uri uri;
@@ -50,6 +54,15 @@ public class AddEvent extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
+        backIcon = findViewById(R.id.back_icon);
+        backIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Events.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         inputFrameEventTitle = findViewById(R.id.inputframeEventTitle);
         inputFrameEventDescription = findViewById(R.id.inputframeEventDescription);
@@ -162,12 +175,14 @@ public class AddEvent extends AppCompatActivity {
 
                 Log.d("Firebase", "Image upload successful");
 
+
                 Map<String, Object> eventData = new HashMap<>();
                 eventData.put("Title", title);
                 eventData.put("Description", description);
                 eventData.put("PhotoUrl", downloadUrl);
                 eventData.put("Attendance", attendance);
                 eventData.put("MaxAttendance", finalMaxAttendanceNumber);
+                eventData.put("CreatedAt", FieldValue.serverTimestamp());
                 eventCollectionRef.add(eventData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
