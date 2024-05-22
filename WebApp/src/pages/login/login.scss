@@ -1,0 +1,76 @@
+.login-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column; /* Dodaliśmy flex-direction: column aby umożliwić wyśrodkowanie elementów */
+    align-items: center;
+    justify-content: center;
+    background-color: #F2F2F2; /* tło szare */
+  
+    .logo {
+      width: 250px;
+      height: 200px;
+
+      .logo-image
+      {
+        width: 100%;
+      }
+    }
+  
+    .form-container {
+      background-color: #D9D9D9; /* tło formularza */
+      border-radius: 20px; /* zaokrąglenie rogów formularza */
+      padding: 30px; /* wewnętrzny odstęp */
+      width: 300px; /* szerokość formularza */
+      margin-bottom: 100px;
+  
+      .formTitle {
+        font-size: 24px; /* Rozmiar tekstu */
+        margin-bottom: 15px; /* Odstęp od góry */
+        text-align: center;
+      }
+  
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+  
+        .input-field {
+          caret-color: transparent;
+          width: 80%;
+          height: 30px;
+          margin: 10px 0;
+          border: 2px solid #B7B7B7; /* obramowanie pól wejściowych */
+          border-radius: 12px; /* zaokrąglenie rogów pól wejściowych */
+          padding: 5px; /* wewnętrzny odstęp wewnątrz pól wejściowych */
+          font-size: 20px;
+          padding-left: 10px;
+        }
+        .input-field::placeholder {
+            padding-left: 10px;
+            color: #BBBBBB; /* kolor placeholdera */
+            font-size: 16px;
+            font-weight: 700; /* rozmiar czcionki */
+        }
+  
+        .login-button {
+          width: 104px;
+          height: 36px; /* Zmniejszono wysokość przycisku */
+          margin-top: 10px; /* Dodano odstęp od góry */
+          border: none;
+          background-color: #d87648; /* kolor przycisku */
+          color: white;
+          font-weight: bold;
+          cursor: pointer;
+          border-radius: 5px; /* zaokrąglenie rogów przycisku */
+          font-size: 18px;
+        }
+  
+        span {
+          font-size: 12px;
+          color: red;
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+  
