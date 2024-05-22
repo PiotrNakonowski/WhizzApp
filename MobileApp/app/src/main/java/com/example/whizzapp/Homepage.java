@@ -124,7 +124,7 @@ public class Homepage extends AppCompatActivity {
             }
         });
 
-        /*schoolScheduleButton.setOnClickListener(new View.OnClickListener() {
+        schoolScheduleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentActivityClass != SchoolSchedule.class) {
@@ -136,7 +136,7 @@ public class Homepage extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
-        });*/
+        });
 
        /* mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
