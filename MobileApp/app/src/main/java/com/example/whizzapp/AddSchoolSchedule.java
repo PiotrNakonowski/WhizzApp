@@ -26,6 +26,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -122,32 +127,44 @@ public class AddSchoolSchedule extends AppCompatActivity {
     }
 
     private void sendImages() {
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         String userID = mAuth.getCurrentUser().getUid();
+
+        File userDir = new File(getFilesDir(), userID);
+        if (!userDir.exists()) {
+            userDir.mkdirs();
+        }
 
         for (Map.Entry<String, Uri> entry : scheduleImages.entrySet()) {
             String day = entry.getKey();
             Uri uri = entry.getValue();
 
             if (uri != null) {
-                StorageReference imageRef = storageRef.child("images/" + userID + "/" + day +".jpg");
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(uri);
+                    if (inputStream != null) {
+                        File file = new File(userDir, day + ".jpg");
+                        OutputStream outputStream = new FileOutputStream(file);
 
-                UploadTask uploadTask = imageRef.putFile(uri);
-
-                uploadTask.addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(AddSchoolSchedule.this, "Zdjęcia zostały wysłane do bazy danych.", Toast.LENGTH_SHORT).show();
-                            Log.d("FirebaseStorage", "Upload successful for day: " + day);
-                        } else {
-                            Toast.makeText(AddSchoolSchedule.this, "Błąd podczas wysyłania zdjęć do bazy danych.", Toast.LENGTH_SHORT).show();
-                            Log.e("FirebaseStorage", "Upload failed for day: " + day, task.getException());
+                        byte[] buffer = new byte[1024];
+                        int bytesRead;
+                        while ((bytesRead = inputStream.read(buffer)) != -1) {
+                            outputStream.write(buffer, 0, bytesRead);
                         }
+
+                        inputStream.close();
+                        outputStream.close();
+
+                        Toast.makeText(AddSchoolSchedule.this, "Zdjęcie zostało zapisane.", Toast.LENGTH_SHORT).show();
+                        Log.d("LocalStorage", "Save successful for day: " + day + ", path: " + file.getAbsolutePath());
+                    } else {
+                        Log.e("LocalStorage", "InputStream is null for URI: " + uri);
                     }
-                });
+                }
+                catch (IOException e) {
+                    Toast.makeText(AddSchoolSchedule.this, "Błąd podczas zapisywania zdjęć lokalnie.", Toast.LENGTH_SHORT).show();
+                    Log.e("LocalStorage", "Save failed for day: " + day, e);
+                }
             }
         }
 
