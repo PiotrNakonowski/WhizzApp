@@ -9,6 +9,10 @@
     android:background="@color/primary_background"
     tools:context=".Homepage">
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
     <FrameLayout
         android:id="@+id/mainContent"
         android:layout_width="match_parent"
@@ -47,6 +51,8 @@
             android:layout_marginTop="25dp"/>
 
     </FrameLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
