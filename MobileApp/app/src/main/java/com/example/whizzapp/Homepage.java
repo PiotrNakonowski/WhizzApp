@@ -520,7 +520,7 @@ public class Homepage extends AppCompatActivity {
                     convertDpToPixel(getScreenWidth() - 48, getApplicationContext()),
                     convertDpToPixel(200, getApplicationContext())
         );
-        tasksContainerLayout.setMargins(convertDpToPixel(24, getApplicationContext()), convertDpToPixel(638, getApplicationContext()), 0, 0);
+        tasksContainerLayout.setMargins(convertDpToPixel(24, getApplicationContext()), convertDpToPixel(638, getApplicationContext()), 0, convertDpToPixel(10, getApplicationContext()));
         tasksContainer.setLayoutParams(tasksContainerLayout);
 
         LinearLayout linearLayoutError = new LinearLayout(this);

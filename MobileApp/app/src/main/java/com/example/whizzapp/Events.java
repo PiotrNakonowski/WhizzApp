@@ -71,6 +71,7 @@ public class Events extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         addButton = findViewById(R.id.addButton);
         welcomeText = findViewById(R.id.welcomeText);
+        todoButton = findViewById(R.id.todoButton);
 
         //MENU ITEMS//
         navButtonClose = findViewById(R.id.navButtonClose);
@@ -154,6 +155,20 @@ public class Events extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }
+            }
+        });
+
+        todoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentActivityClass != ToDoList.class) {
+                    Intent intent = new Intent(getApplicationContext(), ToDoList.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }

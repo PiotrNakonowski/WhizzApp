@@ -355,7 +355,7 @@ public class SchoolSchedule extends AppCompatActivity {
             }
         });*/
 
-        /*todoButton.setOnClickListener(new View.OnClickListener() {
+        todoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentActivityClass != ToDoList.class) {
@@ -367,9 +367,9 @@ public class SchoolSchedule extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
-        });*/
+        });
 
-        /*eventsButton.setOnClickListener(new View.OnClickListener() {
+        eventsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentActivityClass != Events.class) {
@@ -381,7 +381,7 @@ public class SchoolSchedule extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
-        });*/
+        });
 
         /*helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
