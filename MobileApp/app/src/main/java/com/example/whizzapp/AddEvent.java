@@ -22,6 +22,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -37,6 +38,7 @@ import java.util.Map;
 public class AddEvent extends AppCompatActivity {
     private MaterialCardView inputFrameEventTitle;
     private EditText eventTitle;
+    private FirebaseAuth mAuth;
     private MaterialCardView inputFrameEventDescription;
     private EditText eventDescription;
     private MaterialCardView addEventButton;
@@ -63,6 +65,8 @@ public class AddEvent extends AppCompatActivity {
                 finish();
             }
         });
+
+
 
         inputFrameEventTitle = findViewById(R.id.inputframeEventTitle);
         inputFrameEventDescription = findViewById(R.id.inputframeEventDescription);
@@ -175,31 +179,52 @@ public class AddEvent extends AppCompatActivity {
 
                 Log.d("Firebase", "Image upload successful");
 
+                mAuth = FirebaseAuth.getInstance();
 
-                Map<String, Object> eventData = new HashMap<>();
-                eventData.put("Title", title);
-                eventData.put("Description", description);
-                eventData.put("PhotoUrl", downloadUrl);
-                eventData.put("Attendance", attendance);
-                eventData.put("MaxAttendance", finalMaxAttendanceNumber);
-                eventData.put("CreatedAt", FieldValue.serverTimestamp());
-                eventCollectionRef.add(eventData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(AddEvent.this, "Nowe wydarzenie zostało utworzone!", Toast.LENGTH_SHORT).show();
-                        Log.d("Firestore", "Dane zostały pomyślnie dodane do bazy danych");
-                        Intent intent = new Intent(getApplicationContext(), Events.class);
-                        startActivity(intent);
-                        finish();
+                String userId = mAuth.getCurrentUser().getUid();
+                DocumentReference docRef = db.collection("users").document(userId);
+
+                docRef.get().addOnCompleteListener(documentTask -> {
+                    if (documentTask.isSuccessful() && documentTask.getResult() != null) {
+                        DocumentSnapshot document = documentTask.getResult();
+                        if (document.exists()) {
+                            Map<String, Object> eventData = new HashMap<>();
+
+                            String name = document.getString("name");
+                            String surname = document.getString("surname");
+
+                            eventData.put("Name",name);
+                            eventData.put("Surname",surname);
+                            eventData.put("Title", title);
+                            eventData.put("Description", description);
+                            eventData.put("PhotoUrl", downloadUrl);
+                            eventData.put("Attendance", attendance);
+                            eventData.put("MaxAttendance", finalMaxAttendanceNumber);
+                            eventData.put("CreatedAt", FieldValue.serverTimestamp());
+
+                            eventCollectionRef.add(eventData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Toast.makeText(AddEvent.this, "Nowe wydarzenie zostało utworzone!", Toast.LENGTH_SHORT).show();
+                                    Log.d("Firestore", "Dane zostały pomyślnie dodane do bazy danych");
+                                    Intent intent = new Intent(getApplicationContext(), Events.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }).addOnFailureListener(e -> {
+                                Log.e("Firestore", "Błąd podczas dodawania danych do bazy danych: " + e.getMessage());
+                                Toast.makeText(AddEvent.this, "Wystąpił błąd podczad dodawania wydarzenia!", Toast.LENGTH_SHORT).show();
+                            });
+                        }
                     }
-                }).addOnFailureListener(e -> {
-                    Log.e("Firestore", "Błąd podczas dodawania danych do bazy danych: " + e.getMessage());
-                    Toast.makeText(AddEvent.this, "Wystąpił błąd podczad dodawania wydarzenia!", Toast.LENGTH_SHORT).show();
                 });
+
+
             }
 
             @Override
             public void onImageUploadFailure(String errorMessage) {
+
                 Log.e("Firebase", "Image upload failed: " + errorMessage);
             }
         });
