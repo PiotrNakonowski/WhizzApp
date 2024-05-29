@@ -88,7 +88,7 @@
                 android:textSize="16sp"
                 android:textColor="#000000"
                 android:textColorHint="#BBBBBB"
-                android:maxLength="26"
+                android:maxLength="16"
                 />
 
         </com.google.android.material.card.MaterialCardView>
@@ -117,7 +117,7 @@
                 android:paddingEnd="16dp"
                 android:textColor="#000000"
                 android:textColorHint="#BBBBBB"
-                android:maxLength="92"
+                android:maxLength="90"
                 />
 
         </com.google.android.material.card.MaterialCardView>
