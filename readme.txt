@@ -23,3 +23,19 @@
 10. Przykładowe konto:
 Adres e-mail: pefime1902@hutov.com
 Hasło: 123456
+
+!----- INSTRUKCJA DO URUCHOMIENIA APLIKACJI WEBOWEJ -----!
+
+1. Instalacja Node.js
+
+1.1 Otwórz przeglądarke i wyszukaj https://nodejs.org/en/download
+1.2 Pobierz i zainstaluj Node.js
+
+2. Instalacja bibliotek React
+
+2.1 Idź do folderu WebApp i otworz terminal
+2.2 Wpisz 'npm install' aby zainstalować node_modules
+
+3. Uruchomienie aplikacji webowej
+
+3.1 Wpisz 'npm start' aby uruchomić aplikacje w oknie przeglądarki 
