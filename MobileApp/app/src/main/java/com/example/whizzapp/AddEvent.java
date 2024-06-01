@@ -22,26 +22,31 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class AddEvent extends AppCompatActivity {
     private MaterialCardView inputFrameEventTitle;
     private EditText eventTitle;
+    private FirebaseAuth mAuth;
     private MaterialCardView inputFrameEventDescription;
     private EditText eventDescription;
-    private ImageView backIcon;
     private MaterialCardView addEventButton;
     private MaterialCardView addPhotoButton;
-    private MaterialCardView inputFramePhoto;
     private TextView addPhotoText;
+    ImageView backIcon;
+    private MaterialCardView inputFrameMaxAttendanceNumberInput;
     private EditText maxAttendanceNumberInput;
-    private FirebaseAuth mAuth;
     private Uri uri;
     private String fileName;
 
@@ -51,27 +56,27 @@ public class AddEvent extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
+        backIcon = findViewById(R.id.back_icon);
+        backIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Events.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+
 
         inputFrameEventTitle = findViewById(R.id.inputframeEventTitle);
         inputFrameEventDescription = findViewById(R.id.inputframeEventDescription);
-        backIcon = findViewById(R.id.back_icon);
         addEventButton = findViewById(R.id.sendButton);
         addPhotoButton = findViewById(R.id.addPhotoButton);
         addPhotoText = findViewById(R.id.addPhotoText);
         eventTitle = findViewById(R.id.eventTitle);
         eventDescription = findViewById(R.id.eventDescription);
-        inputFramePhoto = findViewById(R.id.inputframePhoto);
+        inputFrameMaxAttendanceNumberInput = findViewById(R.id.maxAttendanceNumber);
         maxAttendanceNumberInput = findViewById(R.id.maxAttendanceNumberText);
-        mAuth = FirebaseAuth.getInstance();
-
-      /*  backIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ToDoList.class);
-                startActivity(intent);
-                finish();
-            }
-        });*/
 
         addPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +134,16 @@ public class AddEvent extends AppCompatActivity {
     private void addEvent() {
         String title = eventTitle.getText().toString().trim();
         String description = eventDescription.getText().toString().trim();
-        long maxAttendanceNumber = Long.parseLong(maxAttendanceNumberInput.getText().toString().trim());
+        long maxAttendanceNumber;
+        try{
+            maxAttendanceNumber = Long.parseLong(maxAttendanceNumberInput.getText().toString().trim());
+        }catch (NumberFormatException e){
+            maxAttendanceNumberInput.setError("Zły format liczby!");
+            maxAttendanceNumberInput.requestFocus();
+            inputFrameMaxAttendanceNumberInput.setStrokeColor(getResources().getColor(R.color.error));
+            return;
+        }
+
         long attendance = 0;
 
         try {
@@ -156,6 +170,7 @@ public class AddEvent extends AppCompatActivity {
         }
 
 
+        long finalMaxAttendanceNumber = maxAttendanceNumber;
         sendImages(uri, fileName, new OnImageUploadListener() {
             @Override
             public void onImageUploadSuccess(String downloadUrl) {
@@ -164,29 +179,52 @@ public class AddEvent extends AppCompatActivity {
 
                 Log.d("Firebase", "Image upload successful");
 
-                Map<String, Object> eventData = new HashMap<>();
-                eventData.put("Title", title);
-                eventData.put("Description", description);
-                eventData.put("PhotoUrl", downloadUrl);
-                eventData.put("Attendance", attendance);
-                eventData.put("MaxAttendance", maxAttendanceNumber);
-                eventCollectionRef.add(eventData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Toast.makeText(AddEvent.this, "Nowe wydarzenie zostało utworzone!", Toast.LENGTH_SHORT).show();
-                        Log.d("Firestore", "Dane zostały pomyślnie dodane do bazy danych");
-                        Intent intent = new Intent(getApplicationContext(), Events.class);
-                        startActivity(intent);
-                        finish();
+                mAuth = FirebaseAuth.getInstance();
+
+                String userId = mAuth.getCurrentUser().getUid();
+                DocumentReference docRef = db.collection("users").document(userId);
+
+                docRef.get().addOnCompleteListener(documentTask -> {
+                    if (documentTask.isSuccessful() && documentTask.getResult() != null) {
+                        DocumentSnapshot document = documentTask.getResult();
+                        if (document.exists()) {
+                            Map<String, Object> eventData = new HashMap<>();
+
+                            String name = document.getString("name");
+                            String surname = document.getString("surname");
+
+                            eventData.put("Name",name);
+                            eventData.put("Surname",surname);
+                            eventData.put("Title", title);
+                            eventData.put("Description", description);
+                            eventData.put("PhotoUrl", downloadUrl);
+                            eventData.put("Attendance", attendance);
+                            eventData.put("MaxAttendance", finalMaxAttendanceNumber);
+                            eventData.put("CreatedAt", FieldValue.serverTimestamp());
+
+                            eventCollectionRef.add(eventData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Toast.makeText(AddEvent.this, "Nowe wydarzenie zostało utworzone!", Toast.LENGTH_SHORT).show();
+                                    Log.d("Firestore", "Dane zostały pomyślnie dodane do bazy danych");
+                                    Intent intent = new Intent(getApplicationContext(), Events.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }).addOnFailureListener(e -> {
+                                Log.e("Firestore", "Błąd podczas dodawania danych do bazy danych: " + e.getMessage());
+                                Toast.makeText(AddEvent.this, "Wystąpił błąd podczad dodawania wydarzenia!", Toast.LENGTH_SHORT).show();
+                            });
+                        }
                     }
-                }).addOnFailureListener(e -> {
-                    Log.e("Firestore", "Błąd podczas dodawania danych do bazy danych: " + e.getMessage());
-                    Toast.makeText(AddEvent.this, "Wystąpił błąd podczad dodawania wydarzenia!", Toast.LENGTH_SHORT).show();
                 });
+
+
             }
 
             @Override
             public void onImageUploadFailure(String errorMessage) {
+
                 Log.e("Firebase", "Image upload failed: " + errorMessage);
             }
         });

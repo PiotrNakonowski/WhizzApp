@@ -7,6 +7,7 @@ import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ public class Registration extends AppCompatActivity {
     MaterialCardView regButton;
     private FirebaseAuth mAuth;
     private FirebaseFirestore db;
+    private CheckBox privacyBox;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +58,7 @@ public class Registration extends AppCompatActivity {
         passwordFrame = findViewById(R.id.inputframe_password);
         emailFrame = findViewById(R.id.inputframe_email);
         passwordRepeatFrame = findViewById(R.id.inputframe_password_repeat);
+        privacyBox = findViewById(R.id.privacyBox);
 
         setFocusChangeListenerForCard(firstnameFrame, R.id.first_name_edit_text);
         setFocusChangeListenerForCard(secondnameFrame, R.id.second_name_edit_text);
@@ -122,6 +125,13 @@ public class Registration extends AppCompatActivity {
         if (!password.equals(confirmPassword)) {
             editTextConfirmPassword.setError("Hasła nie są identyczne!");
             editTextConfirmPassword.requestFocus();
+            return;
+        }
+
+        if (!privacyBox.isChecked()) {
+            privacyBox.setError("Musisz zaakceptować przetwarzanie danych osobowych!");
+            Toast.makeText(this, "Musisz zaakceptować przetwarzanie danych osobowych!", Toast.LENGTH_SHORT).show();
+            privacyBox.requestFocus();
             return;
         }
 
