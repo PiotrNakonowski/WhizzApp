@@ -51,7 +51,10 @@
         <activity android:name=".LoadingScreen"
             android:exported="false" />
 
-        <activity android:name=".NavigationMap"
+        <activity android:name=".ToDoList"
+            android:exported="false" />
+
+        <activity android:name=".AddTask"
             android:exported="false" />
 
         <meta-data

@@ -40,6 +40,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class SchoolSchedule extends AppCompatActivity {
@@ -92,38 +93,40 @@ public class SchoolSchedule extends AppCompatActivity {
         welcomeText = findViewById(R.id.welcomeText);
 
         String[] weekDays = {"monday", "tuesday", "wednesday", "thursday", "friday"};
+        File userDir = new File(getFilesDir(), userID);
 
-        StorageReference pathToImages = storageRef.child("images/" + userID);
-        pathToImages.listAll()
-                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
-                    @Override
-                    public void onSuccess(ListResult listResult) {
-                        for (StorageReference item : listResult.getItems()) {
-                            String fileName = item.getName();
+        if (userDir.exists() && userDir.isDirectory()) {
+            File[] files = userDir.listFiles();
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isFile()) {
+                        String fileName = file.getName();
+                        if (fileName.endsWith(".jpg")) {
                             String fileNameWithoutExtension = fileName.substring(0, fileName.lastIndexOf('.'));
                             namesOfFiles.add(fileNameWithoutExtension);
-                            Log.d("MainActivity", "Nazwa pliku: " + namesOfFiles.get(0));
+                            Log.d("MainActivity", "Nazwa pliku: " + fileNameWithoutExtension);
                         }
-                        if (!namesOfFiles.isEmpty()) {
-                            ViewGroup parent = (ViewGroup) welcomeText.getParent();
-                            parent.removeView(welcomeText);
-                        }
-                        printImages(weekDays, namesOfFiles);
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                loadingScreen.setVisibility(View.GONE);
-                                drawerLayout.setVisibility(View.VISIBLE);
-                            }
-                        }, SPLASH_DELAY);
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("MainActivity", "Błąd podczas pobierania listy plików: ", e);
-                    }
-                });
+                }
+            }
+
+            if (!namesOfFiles.isEmpty()) {
+                ViewGroup parent = (ViewGroup) welcomeText.getParent();
+                parent.removeView(welcomeText);
+            }
+
+            printImages(weekDays, namesOfFiles);
+        } else {
+            Log.e("MainActivity", "Katalog użytkownika nie istnieje lub nie jest katalogiem.");
+        }
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingScreen.setVisibility(View.GONE);
+                drawerLayout.setVisibility(View.VISIBLE);
+            }
+        }, SPLASH_DELAY);
 
         menuHandler();
     }
@@ -140,123 +143,124 @@ public class SchoolSchedule extends AppCompatActivity {
         int screenWidth = displayMetrics.widthPixels;
         float density = getResources().getDisplayMetrics().density;
         int screenWidthInDp = (int) (screenWidth / density);
+
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        String userID = mAuth.getCurrentUser().getUid();
+        File userDir = new File(getFilesDir(), userID);
+
         for (String day : weekDays) {
             if (namesOfFiles.contains(day)) {
-                StorageReference imagePath = storageRef.child("images/" + userID + "/" + day + ".jpg");
-                MaterialCardView cardView = new MaterialCardView(this);
+                File imagePath = new File(userDir, day + ".jpg");
+                if (imagePath.exists()) {
+                    MaterialCardView cardView = new MaterialCardView(this);
 
-                cardView.setRadius(convertDpToPixel(4, this));
-                cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.secondary_background));
+                    cardView.setRadius(convertDpToPixel(4, this));
+                    cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.secondary_background));
 
-                ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(
-                        convertDpToPixel(186, this),
-                        convertDpToPixel(32, this)
-                );
-                marginLayoutParams.setMargins(convertDpToPixel(20, this), convertDpToPixel(110 + (i * 181) + (i * 32), this), 0, 0);
-                cardView.setLayoutParams(marginLayoutParams);
+                    ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(
+                            convertDpToPixel(186, this),
+                            convertDpToPixel(32, this)
+                    );
+                    marginLayoutParams.setMargins(convertDpToPixel(20, this), convertDpToPixel(100 + (i * 181) + (i * 32), this), 0, 0);
+                    cardView.setLayoutParams(marginLayoutParams);
 
-                TextView textView = new TextView(this);
-                textView.setTextColor(getResources().getColor(R.color.black));
-                float textSizeInSp = 16;
-                textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSizeInSp);
-                ViewGroup.LayoutParams textLayoutParams = new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.MATCH_PARENT
-                );
-                textView.setLayoutParams(textLayoutParams);
-                textView.setText("Plan na " + convertDayToPolish(day));
-                textView.setGravity(Gravity.CENTER);
-                Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.open_sans_bold);
-                textView.setTypeface(typeface);
+                    TextView textView = new TextView(this);
+                    textView.setTextColor(getResources().getColor(R.color.black));
+                    float textSizeInSp = 16;
+                    textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSizeInSp);
+                    ViewGroup.LayoutParams textLayoutParams = new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
+                    );
+                    textView.setLayoutParams(textLayoutParams);
+                    textView.setText("Plan na " + convertDayToPolish(day));
+                    textView.setGravity(Gravity.CENTER);
+                    Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.open_sans_bold);
+                    textView.setTypeface(typeface);
 
-                cardView.addView(textView);
+                    cardView.addView(textView);
 
-                ViewGroup parentLayout = findViewById(R.id.mainContent);
-                parentLayout.addView(cardView);
+                    ViewGroup parentLayout = findViewById(R.id.mainContent);
+                    parentLayout.addView(cardView);
 
-                MaterialCardView imageCardView = new MaterialCardView(this);
+                    MaterialCardView imageCardView = new MaterialCardView(this);
 
-                imageCardView.setRadius(convertDpToPixel(4, this));
-                imageCardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.secondary_background));
-                ViewGroup.MarginLayoutParams secondMarginLayoutParams = new ViewGroup.MarginLayoutParams(
-                        convertDpToPixel(screenWidthInDp - 40, this),
-                        convertDpToPixel(159, this)
-                );
-                secondMarginLayoutParams.setMargins(convertDpToPixel(20, this), convertDpToPixel(153 + (i * 54 + (i * 159)), this), 0, 0);
-                imageCardView.setForegroundGravity(Gravity.CENTER);
-                imageCardView.setLayoutParams(secondMarginLayoutParams);
+                    imageCardView.setRadius(convertDpToPixel(4, this));
+                    imageCardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.secondary_background));
+                    ViewGroup.MarginLayoutParams secondMarginLayoutParams = new ViewGroup.MarginLayoutParams(
+                            convertDpToPixel(screenWidthInDp - 40, this),
+                            convertDpToPixel(159, this)
+                    );
+                    secondMarginLayoutParams.setMargins(convertDpToPixel(20, this), convertDpToPixel(143 + (i * 54 + (i * 159)), this), 0, 0);
+                    imageCardView.setForegroundGravity(Gravity.CENTER);
+                    imageCardView.setLayoutParams(secondMarginLayoutParams);
 
-                ImageView scheduleImage = new ImageView(this);
-                ViewGroup.LayoutParams imageLayoutParams = new ViewGroup.LayoutParams(
-                        convertDpToPixel(screenWidthInDp - 60, this),
-                        convertDpToPixel(139, this)
-                );
-                scheduleImage.setLayoutParams(imageLayoutParams);
-                scheduleImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    ImageView scheduleImage = new ImageView(this);
+                    ViewGroup.LayoutParams imageLayoutParams = new ViewGroup.LayoutParams(
+                            convertDpToPixel(screenWidthInDp - 60, this),
+                            convertDpToPixel(139, this)
+                    );
+                    scheduleImage.setLayoutParams(imageLayoutParams);
+                    scheduleImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-                ImageView biggerScheduleImage = new ImageView(this);
-                ViewGroup.LayoutParams biggerLayoutParams = new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                );
-                biggerScheduleImage.setLayoutParams(biggerLayoutParams);
-                biggerScheduleImage.setVisibility(View.GONE);
+                    ImageView biggerScheduleImage = new ImageView(this);
+                    ViewGroup.LayoutParams biggerLayoutParams = new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                    );
+                    biggerScheduleImage.setLayoutParams(biggerLayoutParams);
+                    biggerScheduleImage.setVisibility(View.GONE);
 
-                imagePath.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    try {
+                        Bitmap bitmap = BitmapFactory.decodeFile(imagePath.getAbsolutePath());
                         scheduleImage.setImageBitmap(bitmap);
                         biggerScheduleImage.setImageBitmap(bitmap);
+                    } catch (Exception e) {
+                        Log.e("SchoolSchedule", "Błąd podczas pobierania zdjęcia z lokalnej pamięci.", e);
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e("SchoolSchedule", "Błąd podczas pobierania zdjęcia z bazy danych.");
-                    }
-                });
 
-                imageCardView.addView(scheduleImage);
-                ((FrameLayout.LayoutParams) scheduleImage.getLayoutParams()).gravity = Gravity.CENTER;
-                parentLayout.addView(imageCardView);
-                parentLayout.addView(biggerScheduleImage);
+                    imageCardView.addView(scheduleImage);
+                    ((FrameLayout.LayoutParams) scheduleImage.getLayoutParams()).gravity = Gravity.CENTER;
+                    parentLayout.addView(imageCardView);
+                    parentLayout.addView(biggerScheduleImage);
 
-                scheduleImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SchoolSchedule.this);
-                        LayoutInflater inflater = getLayoutInflater();
-                        View dialogView = inflater.inflate(R.layout.activity_bigger_image, null);
-                        ImageView expandedImageView = dialogView.findViewById(R.id.expandedImageView);
-                        BitmapDrawable drawable = (BitmapDrawable) scheduleImage.getDrawable();
-                        expandedImageView.setImageBitmap(drawable.getBitmap());
-                        builder.setView(dialogView);
+                    scheduleImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(SchoolSchedule.this);
+                            LayoutInflater inflater = getLayoutInflater();
+                            View dialogView = inflater.inflate(R.layout.activity_bigger_image, null);
+                            ImageView expandedImageView = dialogView.findViewById(R.id.expandedImageView);
+                            BitmapDrawable drawable = (BitmapDrawable) scheduleImage.getDrawable();
+                            expandedImageView.setImageBitmap(drawable.getBitmap());
+                            builder.setView(dialogView);
 
-                        builder.setPositiveButton("Zamknij", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
+                            builder.setPositiveButton("Zamknij", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
 
-                        AlertDialog dialog = builder.create();
+                            AlertDialog dialog = builder.create();
 
-                        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-                            @Override
-                            public void onShow(DialogInterface dialogInterface) {
-                                Button button = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE);
-                                button.setBackgroundColor(getResources().getColor(R.color.secondary_background));
-                                button.setTextColor(getResources().getColor(R.color.primary));
-                                Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.open_sans_bold);
-                                button.setTypeface(typeface);
-                            }
-                        });
+                            dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                                @Override
+                                public void onShow(DialogInterface dialogInterface) {
+                                    Button button = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE);
+                                    button.setBackgroundColor(getResources().getColor(R.color.secondary_background));
+                                    button.setTextColor(getResources().getColor(R.color.primary));
+                                    Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.open_sans_bold);
+                                    button.setTypeface(typeface);
+                                }
+                            });
 
-                        dialog.show();
-                    }
-                });
+                            dialog.show();
+                        }
+                    });
 
-                i++;
+                    i++;
+                }
             }
         }
     }
@@ -351,7 +355,7 @@ public class SchoolSchedule extends AppCompatActivity {
             }
         });*/
 
-        /*todoButton.setOnClickListener(new View.OnClickListener() {
+        todoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentActivityClass != ToDoList.class) {
@@ -363,9 +367,9 @@ public class SchoolSchedule extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
-        });*/
+        });
 
-        /*eventsButton.setOnClickListener(new View.OnClickListener() {
+        eventsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentActivityClass != Events.class) {
@@ -377,7 +381,7 @@ public class SchoolSchedule extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
-        });*/
+        });
 
         /*helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
