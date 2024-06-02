@@ -129,7 +129,7 @@ public class NavigationMap extends AppCompatActivity {
                 }
             }
         });
-/*
+
         todoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,7 +143,7 @@ public class NavigationMap extends AppCompatActivity {
                 }
             }
         });
-*/
+
         eventsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
