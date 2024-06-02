@@ -51,6 +51,9 @@
         <activity android:name=".LoadingScreen"
             android:exported="false" />
 
+        <activity android:name=".NavigationMap"
+            android:exported="false" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

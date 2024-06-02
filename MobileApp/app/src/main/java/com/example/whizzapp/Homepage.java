@@ -138,7 +138,7 @@ public class Homepage extends AppCompatActivity {
             }
         });
 
-       /* mapButton.setOnClickListener(new View.OnClickListener() {
+        mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentActivityClass != NavigationMap.class) {
@@ -150,7 +150,8 @@ public class Homepage extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
-        });*/
+        });
+
 
        /* todoButton.setOnClickListener(new View.OnClickListener() {
             @Override
