@@ -9,13 +9,13 @@ const Sidebar = () => {
   return (
     <div className="sidebar">
       <ul>
-      <Link to="/" style={{ textDecoration: "none" }}>
-        <li>
-          <DashboardIcon className="icon" />
-          <span>Panel Główny</span>
-        </li>
-      </Link>
-        <Link to="/#" style={{ textDecoration: "none" }}>
+        <Link to="/" style={{ textDecoration: "none" }}>
+          <li>
+            <DashboardIcon className="icon" />
+            <span>Panel Główny</span>
+          </li>
+        </Link>
+        <Link to="/users" style={{ textDecoration: "none" }}>
           <li>
             <GroupIcon className="icon" />
             <span>Użytkownicy</span>
@@ -27,10 +27,12 @@ const Sidebar = () => {
             <span>Wydarzenia</span>
           </li>
         </Link>
-        <li>
-          <ReportIcon className="icon" />
-          <span>Zgłoszenia</span>
-        </li>
+        <Link to="/#" style={{ textDecoration: "none" }}>
+          <li>
+            <ReportIcon className="icon" />
+            <span>Zgłoszenia</span>
+          </li>
+        </Link>
       </ul>
     </div>
   );
