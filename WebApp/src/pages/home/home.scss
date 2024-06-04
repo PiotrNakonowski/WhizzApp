@@ -8,19 +8,19 @@
   .main
   {
     display: flex;
-  }
-  .homeContainer {
-    flex: 7;
-    
-    .listContainer {
-      padding: 20px;
-      margin: 20px;
+    .homeContainer {
+      flex: 7;
+      background-color: #F0F0F0;
+      .listContainer {
+        padding: 40px;
+        //margin: 20px;
 
-      .listTitle {
-        font-weight: 700;
-        color: black;
-        margin-bottom: 15px;
-        font-size: 24px;
+        .listTitle {
+          font-weight: 700;
+          color: black;
+          margin-bottom: 15px;
+          font-size: 24px;
+        }
       }
     }
   }
