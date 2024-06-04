@@ -201,11 +201,13 @@ public class AddEvent extends AppCompatActivity {
                             eventData.put("Attendance", attendance);
                             eventData.put("MaxAttendance", finalMaxAttendanceNumber);
                             eventData.put("CreatedAt", FieldValue.serverTimestamp());
+                            eventData.put("Approved",false);
+                            eventData.put("Owner",userId);
 
                             eventCollectionRef.add(eventData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
                                 public void onSuccess(DocumentReference documentReference) {
-                                    Toast.makeText(AddEvent.this, "Nowe wydarzenie zostało utworzone!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AddEvent.this, "Wydarzenie utworzone. Po weryfikacji wydarzenie stanie się widoczne", Toast.LENGTH_LONG).show();
                                     Log.d("Firestore", "Dane zostały pomyślnie dodane do bazy danych");
                                     Intent intent = new Intent(getApplicationContext(), Events.class);
                                     startActivity(intent);
