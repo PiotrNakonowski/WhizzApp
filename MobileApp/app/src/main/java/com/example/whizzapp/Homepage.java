@@ -349,10 +349,14 @@ public class Homepage extends AppCompatActivity {
 
         CollectionReference eventsCollectionRef = db.collection("events");
 
+
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+
+
         eventsCollectionRef
+                .whereEqualTo("Approved",true)
                 .orderBy("CreatedAt", Query.Direction.DESCENDING)
                 .limit(1)
                 .get()
@@ -381,7 +385,6 @@ public class Homepage extends AppCompatActivity {
 
                         eventContainer.setLayoutParams(marginLayoutParams);
                         //*******Event Container*******
-
                         if(querySnapshot.isEmpty()){
                             FrameLayout.LayoutParams textLayoutParams = getTextLayoutParams();
 
@@ -406,6 +409,7 @@ public class Homepage extends AppCompatActivity {
                         Map<String, Object> data = document.getData();
                         Log.d("Firestore", "ID dokumentu: " + documentID);
                         Log.d("Firestore", "Dane dokumentu: " + data);
+
 
                         //*******Title*******
                         TextView title = getTitleTextView(data, typeface);
@@ -461,6 +465,7 @@ public class Homepage extends AppCompatActivity {
                     Log.e("Firestore", "Błąd podczas pobierania dokumentów: " + task.getException().getMessage());
                 }
             }
+
         });
     }
 
@@ -490,7 +495,7 @@ public class Homepage extends AppCompatActivity {
     private MaterialCardView getImageHolder() {
         MaterialCardView imageHolder = new MaterialCardView(Homepage.this);
         ViewGroup.MarginLayoutParams photoViewParams = new ViewGroup.MarginLayoutParams(convertDpToPixel(130, getApplicationContext()), convertDpToPixel(100, getApplicationContext()));
-        photoViewParams.setMargins(convertDpToPixel(213, getApplicationContext()), convertDpToPixel(45, getApplicationContext()), 24, 0);
+        photoViewParams.setMargins(convertDpToPixel(213, getApplicationContext()), convertDpToPixel(30, getApplicationContext()), 24, 0);
         imageHolder.setRadius(convertDpToPixel(20,getApplicationContext()));
         imageHolder.setStrokeWidth(0);
         imageHolder.setLayoutParams(photoViewParams);
@@ -745,7 +750,7 @@ public class Homepage extends AppCompatActivity {
                                     ViewGroup.LayoutParams.WRAP_CONTENT,
                                     ViewGroup.LayoutParams.WRAP_CONTENT
                             );
-                            titleLayoutParams.setMargins(convertDpToPixel(15, getApplicationContext()), convertDpToPixel(5, getApplicationContext()), 0, 0);
+                            titleLayoutParams.setMargins(convertDpToPixel(12, getApplicationContext()), convertDpToPixel(5, getApplicationContext()), 0, 0);
                             title.setLayoutParams(titleLayoutParams);
 
                             if (i[0] == 0) {
