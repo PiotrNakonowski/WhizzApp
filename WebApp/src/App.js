@@ -1,5 +1,6 @@
 import Login from "./pages/login/Login";
 import Home from "./pages/home/Home";
+import Users from "./pages/users/Users";
 import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
@@ -25,6 +26,16 @@ function App() {
                   </RequireAuth>
                 }
               />
+            <Route path="users">
+            <Route
+              index
+              element={
+                <RequireAuth>
+                  <Users />
+                </RequireAuth>
+              }
+            />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
