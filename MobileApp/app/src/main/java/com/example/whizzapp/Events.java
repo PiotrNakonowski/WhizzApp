@@ -311,7 +311,11 @@ public class Events extends AppCompatActivity {
                             photoView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             imageHolder.addView(photoView);
 
-                            Picasso.get().load(data.get("PhotoUrl").toString()).into(photoView);
+                            Picasso.get()
+                                    .load(data.get("PhotoUrl").toString())
+                                    .resize(800, 800)
+                                    .into(photoView);
+
 
 
                             eventContainer.addView(imageHolder);
