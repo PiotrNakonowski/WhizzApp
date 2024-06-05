@@ -34,6 +34,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class AddEvent extends AppCompatActivity {
     private MaterialCardView inputFrameEventTitle;
@@ -44,6 +45,7 @@ public class AddEvent extends AppCompatActivity {
     private MaterialCardView addEventButton;
     private MaterialCardView addPhotoButton;
     private TextView addPhotoText;
+    private MaterialCardView inputFramePhoto;
     ImageView backIcon;
     private MaterialCardView inputFrameMaxAttendanceNumberInput;
     private EditText maxAttendanceNumberInput;
@@ -73,6 +75,7 @@ public class AddEvent extends AppCompatActivity {
         addEventButton = findViewById(R.id.sendButton);
         addPhotoButton = findViewById(R.id.addPhotoButton);
         addPhotoText = findViewById(R.id.addPhotoText);
+        inputFramePhoto = findViewById(R.id.inputframePhoto);
         eventTitle = findViewById(R.id.eventTitle);
         eventDescription = findViewById(R.id.eventDescription);
         inputFrameMaxAttendanceNumberInput = findViewById(R.id.maxAttendanceNumber);
@@ -109,7 +112,7 @@ public class AddEvent extends AppCompatActivity {
         });
     }
 
-    protected void sendImages(Uri uri, String fileName, OnImageUploadListener listener) {
+    protected void sendImages(Uri uri, long fileName, OnImageUploadListener listener) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
 
@@ -169,9 +172,18 @@ public class AddEvent extends AppCompatActivity {
             return;
         }
 
+        if(uri == null){
+            addPhotoText.setError("Zdjęcie jest wymagane!");
+            addPhotoText.requestFocus();
+            inputFramePhoto.setStrokeColor(getResources().getColor(R.color.error));
+            return;
+        }
+
 
         long finalMaxAttendanceNumber = maxAttendanceNumber;
-        sendImages(uri, fileName, new OnImageUploadListener() {
+        Random random = new Random();
+        long imgId = random.nextLong();
+        sendImages(uri, imgId , new OnImageUploadListener() {
             @Override
             public void onImageUploadSuccess(String downloadUrl) {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
