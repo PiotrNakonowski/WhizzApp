@@ -175,6 +175,34 @@ public class Events extends AppCompatActivity {
             }
         });
 
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentActivityClass != NavigationMap.class) {
+                    Intent intent = new Intent(getApplicationContext(), NavigationMap.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }
+            }
+        });
+
+        /*helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentActivityClass != HelpReport.class) {
+                    Intent intent = new Intent(getApplicationContext(), HelpReport.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }
+            }
+        });*/
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -315,8 +343,6 @@ public class Events extends AppCompatActivity {
                                     .load(data.get("PhotoUrl").toString())
                                     .resize(800, 800)
                                     .into(photoView);
-
-
 
                             eventContainer.addView(imageHolder);
                             //*******Photo*******

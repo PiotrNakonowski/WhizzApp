@@ -175,7 +175,7 @@ public class Homepage extends AppCompatActivity {
 
     private MaterialCardView createTaskHolder() {
         MaterialCardView taskContainer = new MaterialCardView(this);
-        taskContainer.setRadius(convertDpToPixel(4, getApplicationContext()));
+        taskContainer.setRadius(convertDpToPixel(20, getApplicationContext()));
         taskContainer.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
         taskContainer.setCardBackgroundColor(getColor(R.color.primary));
         taskContainer.setStrokeColor(getColor(R.color.primary));
@@ -198,7 +198,7 @@ public class Homepage extends AppCompatActivity {
         MaterialCardView nameContainer = new MaterialCardView(Homepage.this);
         nameContainer.setStrokeColor(getColor(R.color.primary));
         nameContainer.setCardBackgroundColor(getColor(R.color.secondary_background));
-        nameContainer.setRadius(convertDpToPixel(4, getApplicationContext()));
+        nameContainer.setRadius(convertDpToPixel(20, getApplicationContext()));
         nameContainer.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
 
         ViewGroup.MarginLayoutParams nameContainerLayout = new ViewGroup.MarginLayoutParams(
@@ -253,7 +253,7 @@ public class Homepage extends AppCompatActivity {
         MaterialCardView scheduleContainer = new MaterialCardView(this);
         scheduleContainer.setStrokeColor(getColor(R.color.primary));
         scheduleContainer.setCardBackgroundColor(getColor(R.color.secondary_background));
-        scheduleContainer.setRadius(convertDpToPixel(4, getApplicationContext()));
+        scheduleContainer.setRadius(convertDpToPixel(20, getApplicationContext()));
         scheduleContainer.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
 
         ViewGroup.MarginLayoutParams scheduleContainerLayout = new ViewGroup.MarginLayoutParams(
@@ -264,12 +264,18 @@ public class Homepage extends AppCompatActivity {
         scheduleContainer.setLayoutParams(scheduleContainerLayout);
 
         if (isImageAvailable(dayOfWeek.name().toLowerCase())) {
-            ImageView scheduleImage = new ImageView(this);
-            ViewGroup.LayoutParams imageLayoutParams = new ViewGroup.LayoutParams(
-                    convertDpToPixel(getScreenWidth() - 68, this),
-                    convertDpToPixel(139, this)
+
+            MaterialCardView secondImageHolder = new MaterialCardView(this);
+            secondImageHolder.setRadius(convertDpToPixel(20, getApplicationContext()));
+            secondImageHolder.setStrokeWidth(0);
+            ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(
+                    convertDpToPixel(getScreenWidth() - 48, getApplicationContext()),
+                    convertDpToPixel(159, getApplicationContext())
             );
-            scheduleImage.setLayoutParams(imageLayoutParams);
+            secondImageHolder.setLayoutParams(layoutParams);
+
+            ImageView scheduleImage = new ImageView(this);
+
             scheduleImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
             ImageView biggerScheduleImage = new ImageView(this);
@@ -287,8 +293,10 @@ public class Homepage extends AppCompatActivity {
             scheduleImage.setImageBitmap(bitmap);
             biggerScheduleImage.setImageBitmap(bitmap);
 
-            scheduleContainer.addView(scheduleImage);
-            ((FrameLayout.LayoutParams) scheduleImage.getLayoutParams()).gravity = Gravity.CENTER;
+            secondImageHolder.addView(scheduleImage);
+
+            scheduleContainer.addView(secondImageHolder);
+            ((FrameLayout.LayoutParams) secondImageHolder.getLayoutParams()).gravity = Gravity.CENTER;
             parentLayout.addView(scheduleContainer);
             parentLayout.addView(biggerScheduleImage);
 
@@ -453,7 +461,7 @@ public class Homepage extends AppCompatActivity {
 
                         Picasso.get()
                                 .load(data.get("PhotoUrl").toString())
-                                .resize(800, 800)
+                                .resize(800,600)
                                 .into(photoView);
 
                         eventContainer.addView(imageHolder);
@@ -500,7 +508,7 @@ public class Homepage extends AppCompatActivity {
     private MaterialCardView getImageHolder() {
 
         MaterialCardView imageHolder = new MaterialCardView(Homepage.this);
-        ViewGroup.MarginLayoutParams photoViewParams = new ViewGroup.MarginLayoutParams(convertDpToPixel(130, getApplicationContext()), convertDpToPixel(100, getApplicationContext()));
+        ViewGroup.MarginLayoutParams photoViewParams = new ViewGroup.MarginLayoutParams(convertDpToPixel(100, getApplicationContext()), convertDpToPixel(100, getApplicationContext()));
         photoViewParams.setMargins(0, convertDpToPixel(30, getApplicationContext()), convertDpToPixel(22, getApplicationContext()), 0);
         imageHolder.setRadius(convertDpToPixel(20,getApplicationContext()));
         imageHolder.setStrokeWidth(0);
@@ -514,7 +522,7 @@ public class Homepage extends AppCompatActivity {
      */
     @NonNull
     private ViewGroup.MarginLayoutParams getEventDescriptionLayoutParams() {
-        int specificWidthInDp = 170;
+        int specificWidthInDp = 150;
         int specificWidthInPx = convertDpToPixel(specificWidthInDp, getApplicationContext());
         int specificHeightInDp = 80;
         int specificHeightInPx = convertDpToPixel(specificHeightInDp, getApplicationContext());
@@ -595,7 +603,7 @@ public class Homepage extends AppCompatActivity {
     private MaterialCardView getMaterialCardView() {
         MaterialCardView materialCardView = new MaterialCardView(Homepage.this);
         materialCardView.setCardBackgroundColor(getColor(R.color.secondary_background));
-        materialCardView.setRadius(convertDpToPixel(4, getApplicationContext()));
+        materialCardView.setRadius(convertDpToPixel(20, getApplicationContext()));
         materialCardView.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
         materialCardView.setStrokeColor(getColor(R.color.primary));
         return materialCardView;
@@ -652,7 +660,7 @@ public class Homepage extends AppCompatActivity {
         MaterialCardView nameContainer = new MaterialCardView(Homepage.this);
         nameContainer.setStrokeColor(getColor(R.color.secondary_background));
         nameContainer.setCardBackgroundColor(getColor(R.color.secondary_background));
-        nameContainer.setRadius(convertDpToPixel(4, getApplicationContext()));
+        nameContainer.setRadius(convertDpToPixel(20, getApplicationContext()));
         nameContainer.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
         nameContainer.setStrokeColor(getColor(R.color.primary));
 
@@ -673,7 +681,7 @@ public class Homepage extends AppCompatActivity {
         textLayoutParams.gravity = Gravity.CENTER;
         toDoText.setLayoutParams(textLayoutParams);
         toDoText.setGravity(Gravity.CENTER);
-        toDoText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        toDoText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.open_sans_bold);
         toDoText.setTypeface(typeface);
         toDoText.setText("Lista TO DO");
@@ -684,7 +692,7 @@ public class Homepage extends AppCompatActivity {
         MaterialCardView tasksContainer = new MaterialCardView(this);
         tasksContainer.setStrokeColor(getColor(R.color.secondary_background));
         tasksContainer.setCardBackgroundColor(getColor(R.color.secondary_background));
-        tasksContainer.setRadius(convertDpToPixel(4, getApplicationContext()));
+        tasksContainer.setRadius(convertDpToPixel(20, getApplicationContext()));
         tasksContainer.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
         tasksContainer.setStrokeColor(getColor(R.color.primary));
 
