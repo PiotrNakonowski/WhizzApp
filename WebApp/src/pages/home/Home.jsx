@@ -1,7 +1,9 @@
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import "./home.scss";
-import Table from "../../components/table/Table";
+import HomeUserTable from "../../components/homeUserTable/HomeUserTable";
+import HomeEventTable from "../../components/homeEventTable/HomeEventTable";
+import HomeReportTable from "../../components/homeReportTable/HomeReportTable";
 
 const Home = () => {
   return (
@@ -12,11 +14,11 @@ const Home = () => {
         <div className="homeContainer">
           <div className="listContainer">
             <div className="listTitle">Nowi użytkownicy</div>
-            <Table />
+            <HomeUserTable />
             <div className="listTitle">Nowe wydarzenia</div>
-            <Table />
+            <HomeEventTable />
             <div className="listTitle">Nowe zgłoszenia</div>
-            <Table />
+            <HomeReportTable />
           </div>
         </div>
       </div>
