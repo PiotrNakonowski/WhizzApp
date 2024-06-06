@@ -3,10 +3,14 @@ package com.example.whizzapp;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     MaterialCardView registerButton;
     private EditText editTextEmail, editTextPassword;
     private FirebaseAuth mAuth;
+    TextView resetPassword;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         loginFrame = findViewById(R.id.inputframe_login);
         passwordFrame = findViewById(R.id.inputframe_password);
+        resetPassword = findViewById(R.id.password_reminder_button);
 
         //LOGOWANIE AUTOMATYCZNE JEZELI UZYTKOWNIK JEST ZALOGOWANY
 
@@ -60,6 +66,30 @@ public class MainActivity extends AppCompatActivity {
         });
 
         loginButton.setOnClickListener(v -> loginUser());
+
+
+        String text = "Nie pamiętasz hasła? Kliknij!";
+        SpannableString spannableString = new SpannableString(text);
+
+        // Color for the part "Kliknij!"
+        int start = text.indexOf("Kliknij");
+        int end = start + "Kliknij".length();
+        int primaryColor = getResources().getColor(R.color.primary);
+
+        spannableString.setSpan(new ForegroundColorSpan(primaryColor), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // Optionally underline the entire text or a part of it
+        // spannableString.setSpan(new UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        resetPassword.setText(spannableString);
+        resetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ResetPassword.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     private void loginUser() {

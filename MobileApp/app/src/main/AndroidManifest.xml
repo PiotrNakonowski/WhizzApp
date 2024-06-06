@@ -57,6 +57,13 @@
         <activity android:name=".AddTask"
             android:exported="false" />
 
+        <activity android:name=".NavigationMap"
+            android:exported="false" />
+
+        <activity android:name=".ResetPassword"
+            android:exported="false" />
+
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

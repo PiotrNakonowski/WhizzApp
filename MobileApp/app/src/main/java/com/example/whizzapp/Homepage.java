@@ -28,7 +28,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.firestore.CollectionReference;
@@ -176,15 +175,15 @@ public class Homepage extends AppCompatActivity {
 
     private MaterialCardView createTaskHolder() {
         MaterialCardView taskContainer = new MaterialCardView(this);
-        taskContainer.setRadius(convertDpToPixel(4, getApplicationContext()));
+        taskContainer.setRadius(convertDpToPixel(20, getApplicationContext()));
         taskContainer.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
         taskContainer.setCardBackgroundColor(getColor(R.color.primary));
         taskContainer.setStrokeColor(getColor(R.color.primary));
         ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(
-                convertDpToPixel(getScreenWidth() - 87, getApplicationContext()),
+                convertDpToPixel(getScreenWidth() - 90, getApplicationContext()),
                 convertDpToPixel(28, getApplicationContext())
         );
-        marginLayoutParams.setMargins(convertDpToPixel(17, getApplicationContext()), convertDpToPixel(18, getApplicationContext()), 0, 0);
+        marginLayoutParams.setMargins(convertDpToPixel(20, getApplicationContext()), convertDpToPixel(18, getApplicationContext()), 0, 0);
         taskContainer.setLayoutParams(marginLayoutParams);
         taskContainer.setVisibility(View.GONE);
         return taskContainer;
@@ -197,9 +196,9 @@ public class Homepage extends AppCompatActivity {
         String userID = mAuth.getCurrentUser().getUid();
 
         MaterialCardView nameContainer = new MaterialCardView(Homepage.this);
-        nameContainer.setStrokeColor(getColor(R.color.secondary_background));
+        nameContainer.setStrokeColor(getColor(R.color.primary));
         nameContainer.setCardBackgroundColor(getColor(R.color.secondary_background));
-        nameContainer.setRadius(convertDpToPixel(4, getApplicationContext()));
+        nameContainer.setRadius(convertDpToPixel(20, getApplicationContext()));
         nameContainer.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
 
         ViewGroup.MarginLayoutParams nameContainerLayout = new ViewGroup.MarginLayoutParams(
@@ -239,6 +238,7 @@ public class Homepage extends AppCompatActivity {
         dayOfSchedule.setTextColor(getColor(R.color.black));
         dayOfSchedule.setLayoutParams(textLayoutParams);
         dayOfSchedule.setGravity(Gravity.CENTER);
+        nameContainer.setStrokeColor(getColor(R.color.primary));
         dayOfSchedule.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
         Typeface bold = ResourcesCompat.getFont(getApplicationContext(), R.font.open_sans_bold);
         dayOfSchedule.setTypeface(bold);
@@ -251,9 +251,9 @@ public class Homepage extends AppCompatActivity {
         parentLayout.addView(nameContainer);
 
         MaterialCardView scheduleContainer = new MaterialCardView(this);
-        scheduleContainer.setStrokeColor(getColor(R.color.secondary_background));
+        scheduleContainer.setStrokeColor(getColor(R.color.primary));
         scheduleContainer.setCardBackgroundColor(getColor(R.color.secondary_background));
-        scheduleContainer.setRadius(convertDpToPixel(4, getApplicationContext()));
+        scheduleContainer.setRadius(convertDpToPixel(20, getApplicationContext()));
         scheduleContainer.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
 
         ViewGroup.MarginLayoutParams scheduleContainerLayout = new ViewGroup.MarginLayoutParams(
@@ -264,12 +264,18 @@ public class Homepage extends AppCompatActivity {
         scheduleContainer.setLayoutParams(scheduleContainerLayout);
 
         if (isImageAvailable(dayOfWeek.name().toLowerCase())) {
-            ImageView scheduleImage = new ImageView(this);
-            ViewGroup.LayoutParams imageLayoutParams = new ViewGroup.LayoutParams(
-                    convertDpToPixel(getScreenWidth() - 68, this),
-                    convertDpToPixel(139, this)
+
+            MaterialCardView secondImageHolder = new MaterialCardView(this);
+            secondImageHolder.setRadius(convertDpToPixel(20, getApplicationContext()));
+            secondImageHolder.setStrokeWidth(0);
+            ViewGroup.MarginLayoutParams layoutParams = new ViewGroup.MarginLayoutParams(
+                    convertDpToPixel(getScreenWidth() - 48, getApplicationContext()),
+                    convertDpToPixel(159, getApplicationContext())
             );
-            scheduleImage.setLayoutParams(imageLayoutParams);
+            secondImageHolder.setLayoutParams(layoutParams);
+
+            ImageView scheduleImage = new ImageView(this);
+
             scheduleImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
             ImageView biggerScheduleImage = new ImageView(this);
@@ -287,8 +293,10 @@ public class Homepage extends AppCompatActivity {
             scheduleImage.setImageBitmap(bitmap);
             biggerScheduleImage.setImageBitmap(bitmap);
 
-            scheduleContainer.addView(scheduleImage);
-            ((FrameLayout.LayoutParams) scheduleImage.getLayoutParams()).gravity = Gravity.CENTER;
+            secondImageHolder.addView(scheduleImage);
+
+            scheduleContainer.addView(secondImageHolder);
+            ((FrameLayout.LayoutParams) secondImageHolder.getLayoutParams()).gravity = Gravity.CENTER;
             parentLayout.addView(scheduleContainer);
             parentLayout.addView(biggerScheduleImage);
 
@@ -326,8 +334,7 @@ public class Homepage extends AppCompatActivity {
                     dialog.show();
                 }
             });
-        }
-        else {
+        } else {
             LinearLayout linearLayoutError = new LinearLayout(this);
             linearLayoutError.setOrientation(LinearLayout.HORIZONTAL);
             linearLayoutError.setGravity(Gravity.CENTER);
@@ -351,11 +358,14 @@ public class Homepage extends AppCompatActivity {
 
         CollectionReference eventsCollectionRef = db.collection("events");
 
+
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-        int screenWidth = displayMetrics.widthPixels;
+
+
         eventsCollectionRef
+                .whereEqualTo("Approved",true)
                 .orderBy("CreatedAt", Query.Direction.DESCENDING)
                 .limit(1)
                 .get()
@@ -365,106 +375,102 @@ public class Homepage extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     QuerySnapshot querySnapshot = task.getResult();
                     if (querySnapshot != null) {
-                        List<DocumentSnapshot> documents = querySnapshot.getDocuments();
-                        for (DocumentSnapshot document : documents) {
+                        Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.open_sans_bold);
 
-                            Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.open_sans_bold);
+                        FrameLayout parentLayout = findViewById(R.id.mainContent);
 
-                            //*******Title Section*******
-                            MaterialCardView sectionTitleContainer = new MaterialCardView(Homepage.this);
-                            sectionTitleContainer.setStrokeColor(getColor(R.color.secondary_background));
-                            sectionTitleContainer.setCardBackgroundColor(getColor(R.color.secondary_background));
-                            sectionTitleContainer.setRadius(convertDpToPixel(4, getApplicationContext()));
-                            sectionTitleContainer.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
+                        //*******Section Title*******
+                        ViewGroup.MarginLayoutParams sectionTitleParams = getSectionTitleParams();
+                        TextView sectionTitle = getSectionTitleTextView(typeface);
 
-                            ViewGroup.MarginLayoutParams sectionTitleParams = new ViewGroup.MarginLayoutParams(convertDpToPixel(125, getApplicationContext()), convertDpToPixel(30, getApplicationContext()));
+                        MaterialCardView sectionTitleContainer = getSectionTitleContainer(sectionTitleParams, sectionTitle);
 
-                            sectionTitleParams.setMargins((screenWidth / 2) - (convertDpToPixel(322, getApplicationContext()) / 2), convertDpToPixel(335 + (i * 178) + (i * 20), getApplicationContext()), 0, (i * 20));
-                            sectionTitleContainer.setLayoutParams(sectionTitleParams);
+                        parentLayout.addView(sectionTitleContainer);
+                        //*******Section Title*******
 
-                            TextView sectionTitle = new TextView(Homepage.this);
-                            sectionTitle.setText("Wydarzenia");
-                            sectionTitle.setGravity(Gravity.CENTER);
-                            sectionTitle.setTypeface(typeface);
-                            sectionTitle.setTypeface(typeface);
-                            sectionTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-                            sectionTitle.setTextColor(getColor(R.color.black));
+                        //*******Event Container*******
+                        MaterialCardView eventContainer = getMaterialCardView();
+                        ViewGroup.MarginLayoutParams marginLayoutParams = getEventContainerLayoutParams();
 
+                        eventContainer.setLayoutParams(marginLayoutParams);
+                        //*******Event Container*******
+                        if(querySnapshot.isEmpty()){
+                            FrameLayout.LayoutParams textLayoutParams = getTextLayoutParams();
 
-                            sectionTitleContainer.addView(sectionTitle);
+                            LinearLayout linearLayoutError = new LinearLayout(Homepage.this);
+                            linearLayoutError.setOrientation(LinearLayout.HORIZONTAL);
+                            linearLayoutError.setGravity(Gravity.CENTER);
 
-                            //*******Title Section*******
-                            FrameLayout parentLayout = findViewById(R.id.mainContent);
-                            parentLayout.addView(sectionTitleContainer);
-
-                            String documentID = document.getId();
-                            Map<String, Object> data = document.getData();
-                            Log.d("Firestore", "ID dokumentu: " + documentID);
-                            Log.d("Firestore", "Dane dokumentu: " + data);
-
-                            //*******Event Container*******
-                            MaterialCardView eventContainer = new MaterialCardView(Homepage.this);
-                            eventContainer.setStrokeColor(getColor(R.color.secondary_background));
-                            eventContainer.setCardBackgroundColor(getColor(R.color.secondary_background));
-                            eventContainer.setRadius(convertDpToPixel(4, getApplicationContext()));
-                            eventContainer.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
-
-                            ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(convertDpToPixel(322, getApplicationContext()), convertDpToPixel(130, getApplicationContext()));
-
-                            marginLayoutParams.setMargins((screenWidth / 2) - (convertDpToPixel(322, getApplicationContext()) / 2), convertDpToPixel(375 + (i * 178) + (i * 20), getApplicationContext()), 0, (i * 20));
-                            eventContainer.setLayoutParams(marginLayoutParams);
-
-                            //*******Event Container*******
-
-                            //*******Title*******
-                            TextView title = new TextView(Homepage.this);
-                            title.setText(data.get("Title").toString());
-                            title.setTypeface(typeface);
-                            title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
-                            title.setTextColor(getColor(R.color.black));
-                            ViewGroup.MarginLayoutParams titleLayoutParams = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            titleLayoutParams.setMargins(convertDpToPixel(20, getApplicationContext()), convertDpToPixel(10, getApplicationContext()), 0, 0);
-                            title.setLayoutParams(titleLayoutParams);
-                            title.setGravity(Gravity.TOP);
-
-                            eventContainer.addView(title);
-                            //*******Title*******
-
-                            //*******Description*******
-                            TextView description = new TextView(Homepage.this);
-                            description.setText(data.get("Description").toString());
-                            Typeface descripionTypeface = ResourcesCompat.getFont(getApplicationContext(), R.font.open_sans);
-                            description.setTypeface(descripionTypeface);
-                            description.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
-                            description.setTextColor(getColor(R.color.black));
-                            int specificWidthInDp = 180;
-                            int specificWidthInPx = convertDpToPixel(specificWidthInDp, getApplicationContext());
-
-                            int specificHeightInDp = 87;
-                            int specificHeightInPx = convertDpToPixel(specificHeightInDp, getApplicationContext());
-
-                            ViewGroup.MarginLayoutParams descriptionLayoutParams = new ViewGroup.MarginLayoutParams(specificWidthInPx, specificHeightInPx);
-                            descriptionLayoutParams.setMargins(convertDpToPixel(20, getApplicationContext()), convertDpToPixel(35, getApplicationContext()), 0, 0);
-                            description.setLayoutParams(descriptionLayoutParams);
-
-                            eventContainer.addView(description);
-                            //*******Description*******
-
-                            //*******Photo*******
-                            ImageView photoView = new ImageView(Homepage.this);
-                            ViewGroup.MarginLayoutParams photoViewParams = new ViewGroup.MarginLayoutParams(convertDpToPixel(100, getApplicationContext()), convertDpToPixel(110, getApplicationContext()));
-                            photoViewParams.setMargins(convertDpToPixel(210, getApplicationContext()), convertDpToPixel(15, getApplicationContext()), 0, 0);
-                            photoView.setLayoutParams(photoViewParams);
-
-                            Picasso.get().load(data.get("PhotoUrl").toString()).into(photoView);
-
-                            eventContainer.addView(photoView);
-                            //*******Photo*******
-
+                            TextView errorText = getErrorText(textLayoutParams, typeface);
+                            String alert = "Brak nadchodzących wydarzeń!";
+                            errorText.setText(alert);
+                            linearLayoutError.addView(errorText);
+                            eventContainer.addView(linearLayoutError);
 
                             parentLayout.addView(eventContainer);
-                            i++;
+                            Log.d("Firestore", "Brak dokumentów w kolekcji events.");
+                            return;
                         }
+
+                        DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+
+                        String documentID = document.getId();
+                        Map<String, Object> data = document.getData();
+                        Log.d("Firestore", "ID dokumentu: " + documentID);
+                        Log.d("Firestore", "Dane dokumentu: " + data);
+
+
+                        //*******Title*******
+                        TextView title = getTitleTextView(data, typeface);
+
+                        eventContainer.addView(title);
+                        //*******Title*******
+
+                        //*******Description*******
+                        Typeface descripionTypeface = ResourcesCompat.getFont(getApplicationContext(), R.font.open_sans);
+
+                        ViewGroup.MarginLayoutParams eventDescriptionLayoutParams = getEventDescriptionLayoutParams();
+                        String eventDescriptionContent = data.get("Description").toString();
+                        TextView eventDescription = getTextView(eventDescriptionContent, descripionTypeface, 10);
+                        eventDescription.setLayoutParams(eventDescriptionLayoutParams);
+
+                        eventContainer.addView(eventDescription);
+                        //*******Description*******
+
+                        //*******Author*******
+                        String authorText = "Opublikował: " + data.get("Name").toString() + " " + data.get("Surname").toString();
+                        Typeface AuthorTypeface = ResourcesCompat.getFont(getApplicationContext(), R.font.open_sans);
+                        TextView AuthorTextField = getTextView(authorText, AuthorTypeface, 10);
+
+                        ViewGroup.MarginLayoutParams AuthorLayoutParams = new ViewGroup.MarginLayoutParams(
+                                convertDpToPixel(ViewGroup.LayoutParams.WRAP_CONTENT, getApplicationContext()),
+                                convertDpToPixel(ViewGroup.LayoutParams.WRAP_CONTENT, getApplicationContext())
+                        );
+                        AuthorLayoutParams.setMargins(convertDpToPixel(22, getApplicationContext()), convertDpToPixel(127, getApplicationContext()), 0, 0);
+
+                        AuthorTextField.setLayoutParams(AuthorLayoutParams);
+                        eventContainer.addView(AuthorTextField);
+                        //*******Author*******
+
+                        //*******Photo*******
+                        MaterialCardView imageHolder = getImageHolder();
+
+                        ImageView photoView = new ImageView(Homepage.this);
+                        photoView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        imageHolder.addView(photoView);
+
+                        Picasso.get()
+                                .load(data.get("PhotoUrl").toString())
+                                .resize(800,600)
+                                .into(photoView);
+
+                        eventContainer.addView(imageHolder);
+                        ((FrameLayout.LayoutParams) imageHolder.getLayoutParams()).gravity = Gravity.END;
+                        //*******Photo*******
+
+
+                        parentLayout.addView(eventContainer);
+
                     } else {
                         Log.d("Firestore", "Brak dokumentów w kolekcji.");
                     }
@@ -472,7 +478,179 @@ public class Homepage extends AppCompatActivity {
                     Log.e("Firestore", "Błąd podczas pobierania dokumentów: " + task.getException().getMessage());
                 }
             }
+
         });
+    }
+
+    /**
+     * Prepares TextView with parameters
+     *
+     * @param text text to be set into TextView
+     * @param typeface typeface to be set into TextView
+     * @param size font size to be set into TextView
+     * @return TextView with text, font and font-size set
+     */
+    @NonNull
+    private TextView getTextView(String text, Typeface typeface, int size) {
+        TextView textView = new TextView(Homepage.this);
+        textView.setText(text);
+        textView.setTypeface(typeface);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+        textView.setTextColor(getColor(R.color.black));
+        return textView;
+    }
+
+    /**
+     * Prepares MaterialCardView for image
+     * @return prepared MaterialCardView with parameters
+     */
+    @NonNull
+    private MaterialCardView getImageHolder() {
+
+        MaterialCardView imageHolder = new MaterialCardView(Homepage.this);
+        ViewGroup.MarginLayoutParams photoViewParams = new ViewGroup.MarginLayoutParams(convertDpToPixel(100, getApplicationContext()), convertDpToPixel(100, getApplicationContext()));
+        photoViewParams.setMargins(0, convertDpToPixel(30, getApplicationContext()), convertDpToPixel(22, getApplicationContext()), 0);
+        imageHolder.setRadius(convertDpToPixel(20,getApplicationContext()));
+        imageHolder.setStrokeWidth(0);
+        imageHolder.setLayoutParams(photoViewParams);
+        return imageHolder;
+    }
+
+    /**
+     * Prepares parameters for EventDescription in Events section
+     * @return Layout parameters for EventDescription
+     */
+    @NonNull
+    private ViewGroup.MarginLayoutParams getEventDescriptionLayoutParams() {
+        int specificWidthInDp = 150;
+        int specificWidthInPx = convertDpToPixel(specificWidthInDp, getApplicationContext());
+        int specificHeightInDp = 80;
+        int specificHeightInPx = convertDpToPixel(specificHeightInDp, getApplicationContext());
+
+        ViewGroup.MarginLayoutParams descriptionLayoutParams = new ViewGroup.MarginLayoutParams(specificWidthInPx, specificHeightInPx);
+        descriptionLayoutParams.setMargins(convertDpToPixel(22, getApplicationContext()), convertDpToPixel(45, getApplicationContext()), 0, 0);
+        return descriptionLayoutParams;
+    }
+
+
+    /**
+     * Prepares Layout parameters for Text
+     * @return prepared layout parameters
+     */
+    @NonNull
+    private static FrameLayout.LayoutParams getTextLayoutParams() {
+        FrameLayout.LayoutParams textLayoutParams = new FrameLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        );
+        textLayoutParams.gravity = Gravity.CENTER;
+        return textLayoutParams;
+    }
+
+    /**
+     * Prepares error TextView with parameters
+     * @param textLayoutParams parameters to be set into TextView
+     * @param typeface typeface to be used in errorText
+     * @return prepared TextView with parameters
+     */
+    @NonNull
+    private TextView getErrorText(FrameLayout.LayoutParams textLayoutParams, Typeface typeface) {
+        TextView errorText = new TextView(Homepage.this);
+        errorText.setTextColor(getColor(R.color.black));
+        errorText.setLayoutParams(textLayoutParams);
+        errorText.setGravity(Gravity.CENTER);
+        errorText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 24);
+        errorText.setTypeface(typeface);
+        return errorText;
+    }
+
+    /**
+     * Prepares title TextView for title in events section
+     * @param data data from events collection document
+     * @param typeface typeface to be used
+     * @return prepared titleTextView
+     */
+    @NonNull
+    private TextView getTitleTextView(Map<String, Object> data, Typeface typeface) {
+        String title = data.get("Title").toString();
+        TextView titleTextView = getTextView(title, typeface, 18);
+        ViewGroup.MarginLayoutParams titleLayoutParams = new ViewGroup.MarginLayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        titleLayoutParams.setMargins(convertDpToPixel(22, getApplicationContext()), convertDpToPixel(12, getApplicationContext()), 0, 0);
+        titleTextView.setLayoutParams(titleLayoutParams);
+        titleTextView.setGravity(Gravity.TOP);
+        return titleTextView;
+    }
+
+    /**
+     * Prepares layout params for events MaterialCardView section
+     * @return prepared layout params
+     */
+    @NonNull
+    private ViewGroup.MarginLayoutParams getEventContainerLayoutParams() {
+        ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(
+                convertDpToPixel(getScreenWidth() - 48, getApplicationContext()),
+                convertDpToPixel(159, getApplicationContext())
+        );
+        marginLayoutParams.setMargins(convertDpToPixel(24, getApplicationContext()), convertDpToPixel(400, getApplicationContext()), 0, 0);
+        return marginLayoutParams;
+    }
+
+    /**
+     * Sets parameters to MaterialCardView
+     * @return prepared MaterialCardView with parameters
+     */
+    @NonNull
+    private MaterialCardView getMaterialCardView() {
+        MaterialCardView materialCardView = new MaterialCardView(Homepage.this);
+        materialCardView.setCardBackgroundColor(getColor(R.color.secondary_background));
+        materialCardView.setRadius(convertDpToPixel(20, getApplicationContext()));
+        materialCardView.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
+        materialCardView.setStrokeColor(getColor(R.color.primary));
+        return materialCardView;
+    }
+
+    /**
+     * prepares parameters for titleSection
+     * @return prepared layout parameters with parameters
+     */
+    @NonNull
+    private ViewGroup.MarginLayoutParams getSectionTitleParams() {
+        ViewGroup.MarginLayoutParams sectionTitleParams = new ViewGroup.MarginLayoutParams(
+                convertDpToPixel(100, getApplicationContext()),
+                convertDpToPixel(33, getApplicationContext())
+        );
+        sectionTitleParams.setMargins(convertDpToPixel(24, getApplicationContext()), convertDpToPixel(348, getApplicationContext()), 24, 0);
+        return sectionTitleParams;
+    }
+
+    /**
+     * Prepares container for section title
+     * @param sectionTitleParams layout parameters
+     * @param sectionTitle text to be set into MaterialCardView
+     * @return prepared MaterialCardView
+     */
+    @NonNull
+    private MaterialCardView getSectionTitleContainer(ViewGroup.MarginLayoutParams sectionTitleParams, TextView sectionTitle) {
+        MaterialCardView sectionTitleContainer = getMaterialCardView();
+        sectionTitleContainer.setLayoutParams(sectionTitleParams);
+        sectionTitleContainer.addView(sectionTitle);
+        return sectionTitleContainer;
+    }
+
+    /**
+     * Prepares TextView for event section title
+     * @param typeface to be used
+     * @return prepared TextView
+     */
+    @NonNull
+    private TextView getSectionTitleTextView(Typeface typeface) {
+        TextView sectionTitle = new TextView(Homepage.this);
+        sectionTitle.setText("Wydarzenia");
+        sectionTitle.setGravity(Gravity.CENTER);
+        sectionTitle.setTypeface(typeface);
+        sectionTitle.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
+        sectionTitle.setTextColor(getColor(R.color.black));
+        return sectionTitle;
     }
 
     private void printTasks() {
@@ -482,8 +660,9 @@ public class Homepage extends AppCompatActivity {
         MaterialCardView nameContainer = new MaterialCardView(Homepage.this);
         nameContainer.setStrokeColor(getColor(R.color.secondary_background));
         nameContainer.setCardBackgroundColor(getColor(R.color.secondary_background));
-        nameContainer.setRadius(convertDpToPixel(4, getApplicationContext()));
+        nameContainer.setRadius(convertDpToPixel(20, getApplicationContext()));
         nameContainer.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
+        nameContainer.setStrokeColor(getColor(R.color.primary));
 
         ViewGroup.MarginLayoutParams nameContainerLayout = new ViewGroup.MarginLayoutParams(
                 convertDpToPixel(100, getApplicationContext()),
@@ -502,7 +681,7 @@ public class Homepage extends AppCompatActivity {
         textLayoutParams.gravity = Gravity.CENTER;
         toDoText.setLayoutParams(textLayoutParams);
         toDoText.setGravity(Gravity.CENTER);
-        toDoText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        toDoText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
         Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.open_sans_bold);
         toDoText.setTypeface(typeface);
         toDoText.setText("Lista TO DO");
@@ -513,8 +692,9 @@ public class Homepage extends AppCompatActivity {
         MaterialCardView tasksContainer = new MaterialCardView(this);
         tasksContainer.setStrokeColor(getColor(R.color.secondary_background));
         tasksContainer.setCardBackgroundColor(getColor(R.color.secondary_background));
-        tasksContainer.setRadius(convertDpToPixel(4, getApplicationContext()));
+        tasksContainer.setRadius(convertDpToPixel(20, getApplicationContext()));
         tasksContainer.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
+        tasksContainer.setStrokeColor(getColor(R.color.primary));
 
         ViewGroup.MarginLayoutParams tasksContainerLayout = new ViewGroup.MarginLayoutParams(
                     convertDpToPixel(getScreenWidth() - 48, getApplicationContext()),
@@ -586,7 +766,7 @@ public class Homepage extends AppCompatActivity {
                                     ViewGroup.LayoutParams.WRAP_CONTENT,
                                     ViewGroup.LayoutParams.WRAP_CONTENT
                             );
-                            titleLayoutParams.setMargins(convertDpToPixel(15, getApplicationContext()), convertDpToPixel(5, getApplicationContext()), 0, 0);
+                            titleLayoutParams.setMargins(convertDpToPixel(12, getApplicationContext()), convertDpToPixel(5, getApplicationContext()), 0, 0);
                             title.setLayoutParams(titleLayoutParams);
 
                             if (i[0] == 0) {
@@ -673,7 +853,7 @@ public class Homepage extends AppCompatActivity {
             }
         });
 
-       /* mapButton.setOnClickListener(new View.OnClickListener() {
+        mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentActivityClass != NavigationMap.class) {
@@ -685,7 +865,8 @@ public class Homepage extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
-        });*/
+        });
+
 
         todoButton.setOnClickListener(new View.OnClickListener() {
             @Override

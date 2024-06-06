@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
+import "./homeUserTable.scss";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -17,14 +17,14 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 16,
+    border: 0,
   },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
+const StyledTableRow = styled(TableRow)(() => ({
   '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+    backgroundColor: '#EDEDED',
   },
-  // hide last border
   '&:last-child td, &:last-child th': {
     border: 0,
   },
@@ -35,26 +35,19 @@ const StyledTableHead = styled(TableHead)({
 });
 
 const StyledTableContainer = styled(TableContainer)({
-  // boxShadow: 'none', // Usuwa cień - zakomentowane
-  marginBottom: '20px', // Dodaje margines od dołu
+  marginBottom: '40px',
 });
 
-// Definicja danych do wyświetlenia w tabeli
 const rows = [
   createData(1, 'John', 'Doe', 'john.doe@example.com', '2023-10-15'),
   createData(2, 'Jane', 'Smith', 'jane.smith@example.com', '2023-08-20'),
 ];
 
-// Funkcja do tworzenia danych użytkowników
 function createData(id, name, surname, email, joinDate) {
   return { id, name, surname, email, joinDate };
 }
 
-export default function CustomizedTables() {
-  const handleDelete = (id) => {
-    // Tutaj możesz dodać logikę usuwania użytkownika o podanym ID
-    console.log(`Usuń użytkownika o ID: ${id}`);
-  };
+const HomeUserTable = () => {
 
   return (
     <StyledTableContainer component={Paper}>
@@ -62,11 +55,10 @@ export default function CustomizedTables() {
         <StyledTableHead>
           <TableRow>
             <StyledTableCell>Id_user</StyledTableCell>
-            <StyledTableCell align="right">Imię</StyledTableCell>
-            <StyledTableCell align="right">Nazwisko</StyledTableCell>
-            <StyledTableCell align="right">Email</StyledTableCell>
+            <StyledTableCell align="center">Imię</StyledTableCell>
+            <StyledTableCell align="center">Nazwisko</StyledTableCell>
+            <StyledTableCell align="center">Email</StyledTableCell>
             <StyledTableCell align="right">Data dołączenia</StyledTableCell>
-            <StyledTableCell align="right" style={{ paddingRight: '32px' }}>Akcja</StyledTableCell>
           </TableRow>
         </StyledTableHead>
         <TableBody>
@@ -75,19 +67,10 @@ export default function CustomizedTables() {
               <StyledTableCell component="th" scope="row">
                 {row.id}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.name}</StyledTableCell>
-              <StyledTableCell align="right">{row.surname}</StyledTableCell>
-              <StyledTableCell align="right">{row.email}</StyledTableCell>
+              <StyledTableCell align="center">{row.name}</StyledTableCell>
+              <StyledTableCell align="center">{row.surname}</StyledTableCell>
+              <StyledTableCell align="center">{row.email}</StyledTableCell>
               <StyledTableCell align="right">{row.joinDate}</StyledTableCell>
-              <StyledTableCell align="right">
-                <Button
-                  variant="contained"
-                  style={{ backgroundColor: '#D87648', color: 'white' }}
-                  onClick={() => handleDelete(row.id)}
-                >
-                  Usuń
-                </Button>
-              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
@@ -95,3 +78,4 @@ export default function CustomizedTables() {
     </StyledTableContainer>
   );
 }
+export default HomeUserTable;
