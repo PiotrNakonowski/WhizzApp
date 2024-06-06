@@ -20,7 +20,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Registration extends AppCompatActivity {
     ImageView backIcon;
@@ -138,12 +143,15 @@ public class Registration extends AppCompatActivity {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        User user = new User(name, surname, email);
-                        Log.d("Registration", "Użytkownik został utworzony: " + user.toString());
+                        Map<String, Object> userData = new HashMap<>();
+                        userData.put("name", name);
+                        userData.put("surname", surname);
+                        userData.put("email", email);
+                        userData.put("createdAt", FieldValue.serverTimestamp());
 
                         db.collection("users")
                                 .document(mAuth.getCurrentUser().getUid())
-                                .set(user)
+                                .set(userData)
                                 .addOnSuccessListener(aVoid -> {
                                     sendEmailVerification();
                                     Toast.makeText(Registration.this, "Rejestracja udana!", Toast.LENGTH_SHORT).show();
@@ -181,35 +189,6 @@ public class Registration extends AppCompatActivity {
                     });
         }
     }
-
-    class User
-    {
-        private String name;
-        private String surname;
-        private String email;
-
-        public User() {};
-
-        public User(String name, String surname, String email)
-        {
-            this.name = name;
-            this.surname = surname;
-            this.email = email;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getSurname() {
-            return surname;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-    }
-
 
     private void setFocusChangeListenerForCard(MaterialCardView cardView, int editTextId) {
         EditText editText = findViewById(editTextId);
