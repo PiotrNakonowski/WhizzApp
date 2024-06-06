@@ -143,7 +143,7 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/open_sans_bold"
                 android:text="Zaloguj"
-                android:textColor="#000000"
+                android:textColor="@color/white"
                 android:textSize="12sp" />
         </com.google.android.material.card.MaterialCardView>
 
@@ -175,7 +175,7 @@
                 android:layout_gravity="center"
                 android:fontFamily="@font/open_sans_bold"
                 android:text="Zarejestruj się"
-                android:textColor="#000000"
+                android:textColor="@color/white"
                 android:textSize="12sp" />
         </com.google.android.material.card.MaterialCardView>
 

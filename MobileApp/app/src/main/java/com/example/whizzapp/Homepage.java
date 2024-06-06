@@ -3,11 +3,13 @@ package com.example.whizzapp;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -58,7 +60,8 @@ public class Homepage extends AppCompatActivity {
     private MaterialCardView hamburgerIcon;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private ImageView logoutIcon;
-
+    private View loadingScreen;
+    private static final long SPLASH_DELAY = 2000;
     private int i;
     private Class<?> currentActivityClass;
     private MaterialCardView navButtonClose, homeButton, schoolScheduleButton, mapButton, todoButton, eventsButton, helpButton;
@@ -74,6 +77,7 @@ public class Homepage extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawerLayout);
         hamburgerIcon = findViewById(R.id.nav_button);
         logoutIcon = findViewById(R.id.logoutIcon);
+        loadingScreen = findViewById(R.id.loadingScreen);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
@@ -110,6 +114,14 @@ public class Homepage extends AppCompatActivity {
         printEvents();
         printTasks();
         menuHandler();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingScreen.setVisibility(View.GONE);
+                drawerLayout.setVisibility(View.VISIBLE);
+            }
+        }, SPLASH_DELAY);
     }
 
     private void logoutUser() {
@@ -908,6 +920,5 @@ public class Homepage extends AppCompatActivity {
 
         logoutIcon.setOnClickListener(v -> logoutUser());
     }
-
 
 }
