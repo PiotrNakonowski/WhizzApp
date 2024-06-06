@@ -24,6 +24,32 @@
 Adres e-mail: pefime1902@hutov.com
 Hasło: 123456
 
+POWIADOMIENIA
+Aby powiadomienia były widoczne należy zmienić uprawnienia aplikacji.
+1. Przejdź do ustawień telefonu (przeciągnij ekran z dołu do góry mając kursor np. w połowie ekranu).
+2. Przejdź do Apps -> WhizzApp -> Permissions -> Notifications -> Włącz opcję "All WhizzApp notifications"
+3. Teraz po dodaniu zadania w liście to-do, po 10 sekundach powinno pojawić się powiadomienie.
+
+DODANIE ZDJĘCIA DO TELEFONU
+Sposób nr 1
+1. Otwórz przeglądarkę chrome na telefonie.
+2. Wyszukaj zdjęcie w google grafika np. kotek jpg.
+3. Po kliknięciu w zdjęcie przytrzymaj i z menu rozwijalnego wybierz "Download".
+Teraz podczas dodawnia zdjęcia do planu lekcji lub wydarzeń powinno być widoczne zdjęcie.
+
+Sposób nr 2
+1. Pobierz zdjęcie z Internetu na swój komputer.
+2. Włącz telefon.
+3. Z menu po prawej stronie wybierz "Device manager".
+4. Kliknij na opcję emulatora (trzy kropki po prawej stronie).
+5. Wybierz opcję "Open in Device Explorer"
+6. W Device Explorer przejdź do następującego folderu: storage -> emulated -> 0 -> Pictures
+7. Klinij PPM na Pictures i wybierz "Upload...".
+8. Wybierz zdjęcie z dysku komputera i kliknij "OK".
+9. Zresetuj telefon.
+10. W przypadku kiedy zdjęcia nie widać w aplikacji -> powtórz proces.
+Teraz podczas dodawnia zdjęcia do planu lekcji lub wydarzeń powinno być widoczne zdjęcie.
+
 !----- INSTRUKCJA DO URUCHOMIENIA APLIKACJI WEBOWEJ -----!
 
 1. Instalacja Node.js
