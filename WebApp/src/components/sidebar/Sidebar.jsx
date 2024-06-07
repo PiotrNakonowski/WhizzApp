@@ -21,7 +21,7 @@ const Sidebar = () => {
             <span>Użytkownicy</span>
           </li>
         </Link>
-        <Link to="/#" style={{ textDecoration: "none" }}>
+        <Link to="/events" style={{ textDecoration: "none" }}>
           <li>
             <EventAvailableIcon className="icon" />
             <span>Wydarzenia</span>
