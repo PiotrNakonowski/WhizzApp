@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -70,6 +71,17 @@ public class Registration extends AppCompatActivity {
         setFocusChangeListenerForCard(emailFrame, R.id.email_edit_text);
         setFocusChangeListenerForCard(passwordFrame, R.id.password_edit_text);
         setFocusChangeListenerForCard(passwordRepeatFrame, R.id.password_confirm_edit_text);
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        };
+
+        getOnBackPressedDispatcher().addCallback(this, callback);
 
         regButton.setOnClickListener(v -> registerUser());
     }

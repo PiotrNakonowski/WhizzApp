@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -97,6 +98,17 @@ public class AddTask extends AppCompatActivity {
                 datePickerDialog.show();
             }
         });
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(getApplicationContext(), ToDoList.class);
+                startActivity(intent);
+                finish();
+            }
+        };
+
+        getOnBackPressedDispatcher().addCallback(this, callback);
 
         setFocusChangeListenerForCard(inputFrameTaskTitle, R.id.taskTitle);
         setFocusChangeListenerForCard(inputFrameTaskDescription, R.id.taskDescription);
