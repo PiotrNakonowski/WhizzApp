@@ -1,0 +1,25 @@
+
+.events {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    //overflow: hidden;
+    .main
+    {
+      display: flex;
+    
+      .eventContainer {
+        flex: 7;
+        padding: 40px;
+        background-color: #F0F0F0;
+      
+        .listTitle {
+              font-weight: 700;
+              color: black;
+              margin-bottom: 15px;
+              font-size: 24px;
+        }
+      }
+    }
+  }
+  
