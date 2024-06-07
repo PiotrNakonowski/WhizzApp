@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -29,14 +30,12 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 public class AddEvent extends AppCompatActivity {
+    ImageView backIcon;
     private MaterialCardView inputFrameEventTitle;
     private EditText eventTitle;
     private FirebaseAuth mAuth;
@@ -46,7 +45,6 @@ public class AddEvent extends AppCompatActivity {
     private MaterialCardView addPhotoButton;
     private TextView addPhotoText;
     private MaterialCardView inputFramePhoto;
-    ImageView backIcon;
     private MaterialCardView inputFrameMaxAttendanceNumberInput;
     private EditText maxAttendanceNumberInput;
     private Uri uri;
@@ -68,6 +66,16 @@ public class AddEvent extends AppCompatActivity {
             }
         });
 
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(getApplicationContext(), Events.class);
+                startActivity(intent);
+                finish();
+            }
+        };
+
+        getOnBackPressedDispatcher().addCallback(this, callback);
 
 
         inputFrameEventTitle = findViewById(R.id.inputframeEventTitle);
@@ -90,6 +98,7 @@ public class AddEvent extends AppCompatActivity {
 
         addEventButton.setOnClickListener(v -> addEvent());
     }
+
 
     protected void onStart() {
         super.onStart();
@@ -138,9 +147,9 @@ public class AddEvent extends AppCompatActivity {
         String title = eventTitle.getText().toString().trim();
         String description = eventDescription.getText().toString().trim();
         long maxAttendanceNumber;
-        try{
+        try {
             maxAttendanceNumber = Long.parseLong(maxAttendanceNumberInput.getText().toString().trim());
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             maxAttendanceNumberInput.setError("Zły format liczby!");
             maxAttendanceNumberInput.requestFocus();
             inputFrameMaxAttendanceNumberInput.setStrokeColor(getResources().getColor(R.color.error));
@@ -172,7 +181,7 @@ public class AddEvent extends AppCompatActivity {
             return;
         }
 
-        if(uri == null){
+        if (uri == null) {
             addPhotoText.setError("Zdjęcie jest wymagane!");
             addPhotoText.requestFocus();
             inputFramePhoto.setStrokeColor(getResources().getColor(R.color.error));
@@ -183,7 +192,7 @@ public class AddEvent extends AppCompatActivity {
         long finalMaxAttendanceNumber = maxAttendanceNumber;
         Random random = new Random();
         long imgId = random.nextLong();
-        sendImages(uri, imgId , new OnImageUploadListener() {
+        sendImages(uri, imgId, new OnImageUploadListener() {
             @Override
             public void onImageUploadSuccess(String downloadUrl) {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -205,16 +214,16 @@ public class AddEvent extends AppCompatActivity {
                             String name = document.getString("name");
                             String surname = document.getString("surname");
 
-                            eventData.put("Name",name);
-                            eventData.put("Surname",surname);
+                            eventData.put("Name", name);
+                            eventData.put("Surname", surname);
                             eventData.put("Title", title);
                             eventData.put("Description", description);
                             eventData.put("PhotoUrl", downloadUrl);
                             eventData.put("Attendance", attendance);
                             eventData.put("MaxAttendance", finalMaxAttendanceNumber);
                             eventData.put("CreatedAt", FieldValue.serverTimestamp());
-                            eventData.put("Approved",false);
-                            eventData.put("Owner",userId);
+                            eventData.put("Approved", false);
+                            eventData.put("Owner", userId);
 
                             eventCollectionRef.add(eventData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
