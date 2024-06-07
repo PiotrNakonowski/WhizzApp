@@ -8,7 +8,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -23,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,13 +30,9 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
-import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,24 +46,19 @@ public class SchoolSchedule extends AppCompatActivity {
     private Class<?> currentActivityClass;
     private MaterialCardView navButtonClose, homeButton, schoolScheduleButton, mapButton, todoButton, eventsButton, helpButton;
     private MaterialCardView addButton;
-    private StorageReference storageRef;
     private TextView welcomeText;
     private String userID;
     private int i = 0;
     private ArrayList<String> namesOfFiles;
-    private View loadingScreen;
-    private static final long SPLASH_DELAY = 2000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_school_schedule);
-        loadingScreen = findViewById(R.id.loadingScreen);
 
         currentActivityClass = getClass();
         namesOfFiles = new ArrayList<>();
 
         mAuth = FirebaseAuth.getInstance();
-        storageRef = FirebaseStorage.getInstance().getReference();
         userID = mAuth.getCurrentUser().getUid();
 
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -120,14 +109,6 @@ public class SchoolSchedule extends AppCompatActivity {
             Log.e("MainActivity", "Katalog użytkownika nie istnieje lub nie jest katalogiem.");
         }
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadingScreen.setVisibility(View.GONE);
-                drawerLayout.setVisibility(View.VISIBLE);
-            }
-        }, SPLASH_DELAY);
-
         menuHandler();
     }
 
@@ -154,8 +135,10 @@ public class SchoolSchedule extends AppCompatActivity {
                 if (imagePath.exists()) {
                     MaterialCardView cardView = new MaterialCardView(this);
 
-                    cardView.setRadius(convertDpToPixel(4, this));
+                    cardView.setRadius(convertDpToPixel(20, this));
                     cardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.secondary_background));
+                    cardView.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
+                    cardView.setStrokeColor(getColor(R.color.primary));
 
                     ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(
                             convertDpToPixel(186, this),
@@ -185,20 +168,21 @@ public class SchoolSchedule extends AppCompatActivity {
 
                     MaterialCardView imageCardView = new MaterialCardView(this);
 
-                    imageCardView.setRadius(convertDpToPixel(4, this));
+                    imageCardView.setRadius(convertDpToPixel(20, this));
                     imageCardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.secondary_background));
+                    imageCardView.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
+                    imageCardView.setStrokeColor(getColor(R.color.primary));
                     ViewGroup.MarginLayoutParams secondMarginLayoutParams = new ViewGroup.MarginLayoutParams(
                             convertDpToPixel(screenWidthInDp - 40, this),
                             convertDpToPixel(159, this)
                     );
-                    secondMarginLayoutParams.setMargins(convertDpToPixel(20, this), convertDpToPixel(143 + (i * 54 + (i * 159)), this), 0, 0);
-                    imageCardView.setForegroundGravity(Gravity.CENTER);
+                    secondMarginLayoutParams.setMargins(convertDpToPixel(20, this), convertDpToPixel(143 + (i * 54 + (i * 159)), this), 0, convertDpToPixel(10, getApplicationContext()));
                     imageCardView.setLayoutParams(secondMarginLayoutParams);
 
                     ImageView scheduleImage = new ImageView(this);
                     ViewGroup.LayoutParams imageLayoutParams = new ViewGroup.LayoutParams(
-                            convertDpToPixel(screenWidthInDp - 60, this),
-                            convertDpToPixel(139, this)
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT
                     );
                     scheduleImage.setLayoutParams(imageLayoutParams);
                     scheduleImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -341,7 +325,7 @@ public class SchoolSchedule extends AppCompatActivity {
             }
         });
 
-        /*mapButton.setOnClickListener(new View.OnClickListener() {
+        mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentActivityClass != NavigationMap.class) {
@@ -353,7 +337,7 @@ public class SchoolSchedule extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
-        });*/
+        });
 
         todoButton.setOnClickListener(new View.OnClickListener() {
             @Override

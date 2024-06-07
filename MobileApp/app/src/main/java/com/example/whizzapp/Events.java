@@ -35,6 +35,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
@@ -174,6 +175,34 @@ public class Events extends AppCompatActivity {
             }
         });
 
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentActivityClass != NavigationMap.class) {
+                    Intent intent = new Intent(getApplicationContext(), NavigationMap.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }
+            }
+        });
+
+        /*helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentActivityClass != HelpReport.class) {
+                    Intent intent = new Intent(getApplicationContext(), HelpReport.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }
+            }
+        });*/
+
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -205,7 +234,11 @@ public class Events extends AppCompatActivity {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(displayMetrics);
         int screenWidth = displayMetrics.widthPixels;
-        eventsCollectionRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        eventsCollectionRef
+                .whereEqualTo("Approved",true)
+                .orderBy("CreatedAt", Query.Direction.DESCENDING)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
@@ -216,10 +249,13 @@ public class Events extends AppCompatActivity {
                             if (welcomeText.getVisibility() == View.VISIBLE) {
                                 welcomeText.setVisibility(View.GONE);
                             }
+
+
                             String documentID = document.getId();
                             Map<String, Object> data = document.getData();
                             Log.d("Firestore", "ID dokumentu: " + documentID);
                             Log.d("Firestore", "Dane dokumentu: " + data);
+
 
                             //*******Event Container*******
                             MaterialCardView eventContainer = new MaterialCardView(Events.this);
@@ -293,7 +329,7 @@ public class Events extends AppCompatActivity {
                             //*******Photo*******
                             MaterialCardView imageHolder = new MaterialCardView(Events.this);
                             ViewGroup.MarginLayoutParams photoViewParams = new ViewGroup.MarginLayoutParams(convertDpToPixel(90, getApplicationContext()), convertDpToPixel(87, getApplicationContext()));
-                            photoViewParams.setMargins(convertDpToPixel(210, getApplicationContext()), convertDpToPixel(35, getApplicationContext()), 0, 0);
+                            photoViewParams.setMargins(convertDpToPixel(210, getApplicationContext()), convertDpToPixel(25, getApplicationContext()), 0, 0);
                             imageHolder.setRadius(convertDpToPixel(20,getApplicationContext()));
                             imageHolder.setStrokeWidth(0);
                             imageHolder.setLayoutParams(photoViewParams);
@@ -303,8 +339,10 @@ public class Events extends AppCompatActivity {
                             photoView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             imageHolder.addView(photoView);
 
-                            Picasso.get().load(data.get("PhotoUrl").toString()).into(photoView);
-
+                            Picasso.get()
+                                    .load(data.get("PhotoUrl").toString())
+                                    .resize(800, 800)
+                                    .into(photoView);
 
                             eventContainer.addView(imageHolder);
                             //*******Photo*******
