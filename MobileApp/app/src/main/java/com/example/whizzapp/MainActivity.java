@@ -1,7 +1,10 @@
 package com.example.whizzapp;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -42,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         passwordFrame = findViewById(R.id.inputframe_password);
         resetPassword = findViewById(R.id.password_reminder_button);
 
+        createNotificationChannel();
+
         //LOGOWANIE AUTOMATYCZNE JEZELI UZYTKOWNIK JEST ZALOGOWANY
 
         if (mAuth.getCurrentUser() != null && mAuth.getCurrentUser().isEmailVerified()) {
@@ -71,15 +76,11 @@ public class MainActivity extends AppCompatActivity {
         String text = "Nie pamiętasz hasła? Kliknij!";
         SpannableString spannableString = new SpannableString(text);
 
-        // Color for the part "Kliknij!"
         int start = text.indexOf("Kliknij");
         int end = start + "Kliknij".length();
         int primaryColor = getResources().getColor(R.color.primary);
 
         spannableString.setSpan(new ForegroundColorSpan(primaryColor), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        // Optionally underline the entire text or a part of it
-        // spannableString.setSpan(new UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         resetPassword.setText(spannableString);
         resetPassword.setOnClickListener(new View.OnClickListener() {
@@ -158,6 +159,24 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Task Notifications";
+            String description = "Notifications for tasks";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel("1", name, importance);
+            channel.setDescription(description);
+            channel.enableLights(true);
+            channel.setLightColor(Color.RED);
+            channel.enableVibration(true);
+
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+        }
     }
 
     private void clearAllEditTextFocus() {

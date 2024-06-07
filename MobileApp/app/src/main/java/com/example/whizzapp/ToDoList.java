@@ -154,7 +154,7 @@ public class ToDoList extends AppCompatActivity {
             }
         });
 
-        /*mapButton.setOnClickListener(new View.OnClickListener() {
+        mapButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentActivityClass != NavigationMap.class) {
@@ -166,7 +166,7 @@ public class ToDoList extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
-        });*/
+        });
 
         todoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -260,7 +260,7 @@ public class ToDoList extends AppCompatActivity {
                                     convertDpToPixel(200, getApplicationContext())
                             );
 
-                            marginLayoutParams.setMargins((screenWidth / 2) - (convertDpToPixel(322, getApplicationContext()) / 2), convertDpToPixel(top[0], getApplicationContext()), 0, 0);
+                            marginLayoutParams.setMargins((screenWidth / 2) - (convertDpToPixel(322, getApplicationContext()) / 2), convertDpToPixel(top[0], getApplicationContext()), 0, convertDpToPixel(10, getApplicationContext()));
                             taskContainer.setLayoutParams(marginLayoutParams);
 
                             FrameLayout parentLayout = findViewById(R.id.mainContent);
@@ -321,7 +321,6 @@ public class ToDoList extends AppCompatActivity {
                                 @Override
                                 public void onClick(View v) {
                                     DocumentReference documentRefToDelete = db.collection("todo").document(userID).collection("tasks").document(documentID);
-
                                     documentRefToDelete.delete()
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
