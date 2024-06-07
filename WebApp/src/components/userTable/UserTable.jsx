@@ -4,8 +4,14 @@ import { styled } from '@mui/material/styles';
 import { DataGrid } from '@mui/x-data-grid';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
-import { collection, getDocs, deleteDoc, doc} from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase'; 
+import { functions } from '../../firebase';
+import { httpsCallable } from "firebase/functions";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+
+
 
 const StyledTableContainer = styled(Paper)({
   backgroundColor: 'white',
@@ -63,14 +69,12 @@ const StyledDataGrid = styled(DataGrid)(() => ({
 const UserTable = () => {
   
   const [data, setData] = useState([]);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       let list = [];
       try {
-       // const colRef = collection(db, "users");
-       // getDocs(colRef)
-       //   .then((snapshot) => {console.log(snapshot.docs)}) 
         const querySnapshot = await getDocs(collection(db, "users"));
         querySnapshot.forEach((doc) => {
           const data = doc.data();
@@ -78,7 +82,6 @@ const UserTable = () => {
           list.push({ id: doc.id, ...data, createdAt });
         });
         setData(list);
-        console.log(list);
       } catch (err) {
         console.log(err);
       }
@@ -89,13 +92,24 @@ const UserTable = () => {
   }, []);
 
   const handleDelete = async (id) => {
+    setIsDeleting(true);
+    const deleteUser = httpsCallable(functions, 'deleteUser');
+  
     try {
-      await deleteDoc(doc(db, "users", id));
-      setData(data.filter((item) => item.id !== id));
+      const result = await deleteUser({ uid: id });
+  
+      if (result.data.success) {
+        setData(data.filter((item) => item.id !== id));
+      } else {
+        console.error("Error deleting user:", result.data.error);
+      }
     } catch (err) {
-      console.log(err);
+      console.error(err);
+    } finally {
+      setIsDeleting(false);
     }
   };
+  
   
   const columns = [
     { field: 'id', headerName: 'Id_user', flex: 2 },
@@ -121,6 +135,7 @@ const UserTable = () => {
   ];
 
   return (
+    <>
     <StyledTableContainer>
       <StyledDataGrid
         rows={data}
@@ -134,7 +149,17 @@ const UserTable = () => {
         disableSelectionOnClick
       />
     </StyledTableContainer>
+    <Backdrop
+    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+    open={isDeleting}
+  >
+    <CircularProgress color="inherit" />
+  </Backdrop>
+  </>
   );
 }
 
 export default UserTable;
+
+  
+  

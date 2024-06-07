@@ -59,9 +59,12 @@ Teraz podczas dodawnia zdjęcia do planu lekcji lub wydarzeń powinno być widoc
 
 2. Instalacja bibliotek React
 
-2.1 Idź do folderu WebApp i otworz terminal
-2.2 Wpisz 'npm install' aby zainstalować node_modules
+2.1 Idź do folderu 'WebApp' i otworz terminal
+2.2 Wpisz 'npm install' aby zainstalować odpowiednie zależności dla tej części projektu
 
-3. Uruchomienie aplikacji webowej
+2.3 Przejdź do katalogu 'functions'
+2.4 Wpisz 'npm install' aby zainstalować odpowiednie zależności dla tej części projektu
 
-3.1 Wpisz 'npm start' aby uruchomić aplikacje w oknie przeglądarki 
+3. Uruchomienie aplikacji
+3.1 Wróć do katalogu 'WebApp'
+3.2 Wpisz 'npm start' aby uruchomić aplikacje w oknie przeglądarki
