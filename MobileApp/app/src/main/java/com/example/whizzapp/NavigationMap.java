@@ -169,7 +169,7 @@ public class NavigationMap extends AppCompatActivity {
                 }
             }
         });
-/*
+
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,7 +183,7 @@ public class NavigationMap extends AppCompatActivity {
                 }
             }
         });
-*/
+
         logoutIcon.setOnClickListener(v -> logoutUser());
     }
 }

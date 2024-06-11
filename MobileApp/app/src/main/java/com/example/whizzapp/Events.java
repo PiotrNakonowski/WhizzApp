@@ -202,7 +202,7 @@ public class Events extends AppCompatActivity {
             }
         });
 
-        /*helpButton.setOnClickListener(new View.OnClickListener() {
+        helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentActivityClass != HelpReport.class) {
@@ -214,7 +214,7 @@ public class Events extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
-        });*/
+        });
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
