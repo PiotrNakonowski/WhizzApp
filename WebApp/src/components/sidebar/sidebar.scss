@@ -1,37 +1,43 @@
-.sidebar {
+.sidebar 
+{
   flex: 1;
   min-height: 100vh;
   min-width: 230px;
   background-color: #616161;
 
-  ul {
+  ul 
+  {
     list-style: none;
     margin: 0;
     padding: 0;
 
-    li {
+    li 
+    {
       display: flex;
       padding-top: 40px;
       padding-left: 30px;
       cursor: pointer;
-      
-      /*
-      &:hover {
-        background-color: #727171;
-      }
-      */
-      .icon {
-        font-size: 20px;
-        color: #F0F0F0;
-      }
 
-      span{
+      a 
+      {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        font-size: 20px;
+        font-weight: 700;
+        color: #F0F0F0;
+
+        .icon 
+        {
           font-size: 20px;
-          font-weight: 700;
-          color: #F0F0F0;
-          margin-left: 10px;
+          margin-right: 10px;
+        }
       }
     }
   }
-
+  a.active
+  {
+    font-weight: 900;
+  }
 }
+

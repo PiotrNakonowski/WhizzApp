@@ -12,14 +12,12 @@ const Home = () => {
       <div className="main">
         <Sidebar />
         <div className="homeContainer">
-          <div className="listContainer">
-            <div className="listTitle">Nowi użytkownicy</div>
-            <HomeUserTable />
-            <div className="listTitle">Nowe wydarzenia</div>
-            <HomeEventTable />
-            <div className="listTitle">Nowe zgłoszenia</div>
-            <HomeReportTable />
-          </div>
+          <div className="listTitle">Nowi użytkownicy</div>
+          <HomeUserTable />
+          <div className="listTitle">Nowe wydarzenia</div>
+          <HomeEventTable />
+          <div className="listTitle">Nowe zgłoszenia</div>
+          <HomeReportTable />
         </div>
       </div>
     </div>
