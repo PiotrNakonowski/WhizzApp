@@ -208,7 +208,7 @@ public class ToDoList extends AppCompatActivity {
             }
         });
 
-        /*helpButton.setOnClickListener(new View.OnClickListener() {
+        helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentActivityClass != HelpReport.class) {
@@ -220,7 +220,7 @@ public class ToDoList extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
-        });*/
+        });
 
         logoutIcon.setOnClickListener(v -> logoutUser());
     }
