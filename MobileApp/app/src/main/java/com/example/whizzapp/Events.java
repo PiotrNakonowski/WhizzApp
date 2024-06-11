@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -83,6 +84,18 @@ public class Events extends AppCompatActivity {
         eventsButton = findViewById(R.id.eventsButton);
         helpButton = findViewById(R.id.helpButton);
         //MENU ITEMS//
+
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(getApplicationContext(), Homepage.class);
+                startActivity(intent);
+                finish();
+            }
+        };
+
+        getOnBackPressedDispatcher().addCallback(this, callback);
 
         printEvents();
         menuHandler();
@@ -174,6 +187,34 @@ public class Events extends AppCompatActivity {
                 }
             }
         });
+
+        mapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentActivityClass != NavigationMap.class) {
+                    Intent intent = new Intent(getApplicationContext(), NavigationMap.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }
+            }
+        });
+
+        /*helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (currentActivityClass != HelpReport.class) {
+                    Intent intent = new Intent(getApplicationContext(), HelpReport.class);
+                    startActivity(intent);
+                    finish();
+                }
+                else {
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }
+            }
+        });*/
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -311,8 +352,10 @@ public class Events extends AppCompatActivity {
                             photoView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             imageHolder.addView(photoView);
 
-                            Picasso.get().load(data.get("PhotoUrl").toString()).into(photoView);
-
+                            Picasso.get()
+                                    .load(data.get("PhotoUrl").toString())
+                                    .resize(800, 800)
+                                    .into(photoView);
 
                             eventContainer.addView(imageHolder);
                             //*******Photo*******

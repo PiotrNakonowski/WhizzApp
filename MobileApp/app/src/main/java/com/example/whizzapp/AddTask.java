@@ -1,9 +1,15 @@
 package com.example.whizzapp;
 
+import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -13,7 +19,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,6 +32,10 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -87,6 +99,17 @@ public class AddTask extends AppCompatActivity {
             }
         });
 
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(getApplicationContext(), ToDoList.class);
+                startActivity(intent);
+                finish();
+            }
+        };
+
+        getOnBackPressedDispatcher().addCallback(this, callback);
+
         setFocusChangeListenerForCard(inputFrameTaskTitle, R.id.taskTitle);
         setFocusChangeListenerForCard(inputFrameTaskDescription, R.id.taskDescription);
 
@@ -108,10 +131,65 @@ public class AddTask extends AppCompatActivity {
         });
     }
 
+    private void checkExactAlarmPermissionAndScheduleNotification(String taskName, long expireDateMillis) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            if (!alarmManager.canScheduleExactAlarms()) {
+                requestExactAlarmPermission();
+                return;
+            }
+        }
+        scheduleNotification(taskName, expireDateMillis);
+    }
+
+    private void requestExactAlarmPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            Intent intent = new Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+            startActivityForResult(intent, 1);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            String taskName = taskTitle.getText().toString().trim();
+            String expireDateString = expireDate.getText().toString().trim();
+            expireDateString = expireDateString.replace("r.", "").trim();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.M.yyyy");
+            LocalDate expireDate = LocalDate.parse(expireDateString, formatter);
+            ZonedDateTime expireDateTime = expireDate.atStartOfDay(ZoneId.systemDefault());
+            long expireDateMillis = expireDateTime.toInstant().toEpochMilli();
+            checkExactAlarmPermissionAndScheduleNotification(taskName, expireDateMillis);
+        }
+    }
+
+    private void scheduleNotification(String taskName, long expireDateMillis) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, TaskNotificationReceiver.class);
+        intent.putExtra("taskName", taskName);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        long triggerTime = System.currentTimeMillis() + 10 * 1000;
+
+        if (alarmManager != null) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent);
+        }
+    }
+
     private void addTask() {
         String title = taskTitle.getText().toString().trim();
         String description = taskDescription.getText().toString().trim();
         String date = expireDate.getText().toString().trim();
+        String dateWithoutR = date.replace("r.", "").trim();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d.M.yyyy");
+        LocalDate expire = LocalDate.parse(dateWithoutR, formatter);
+
+        ZonedDateTime expireDateTime = expire.atStartOfDay(ZoneId.systemDefault());
+
+        long expireDateMillis = expireDateTime.toInstant().toEpochMilli();
 
         try
         {
@@ -172,6 +250,8 @@ public class AddTask extends AppCompatActivity {
                         Toast.makeText(AddTask.this, "Wystąpił błąd podczad dodawania zadania!", Toast.LENGTH_SHORT).show();
                     }
                 });
+
+        scheduleNotification(title, expireDateMillis);
         return;
     }
 

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,7 +8,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import "./homeUserTable.scss";
+import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { db } from '../../firebase'; 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -21,7 +23,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
 }));
 
-const StyledTableRow = styled(TableRow)(() => ({
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(odd)': {
     backgroundColor: '#EDEDED',
   },
@@ -35,19 +37,30 @@ const StyledTableHead = styled(TableHead)({
 });
 
 const StyledTableContainer = styled(TableContainer)({
-  marginBottom: '40px',
+  marginBottom: '35px',
 });
 
-const rows = [
-  createData(1, 'John', 'Doe', 'john.doe@example.com', '2023-10-15'),
-  createData(2, 'Jane', 'Smith', 'jane.smith@example.com', '2023-08-20'),
-];
-
-function createData(id, name, surname, email, joinDate) {
-  return { id, name, surname, email, joinDate };
-}
-
 const HomeUserTable = () => {
+  const [rows, setRows] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const q = query(collection(db, 'users'), orderBy('createdAt', 'desc'), limit(2));
+        const querySnapshot = await getDocs(q);
+        const users = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+          joinDate: doc.data().createdAt?.toDate().toISOString().split('T')[0]
+        }));
+        setRows(users);
+      } catch (error) {
+        console.error('Error fetching users: ', error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   return (
     <StyledTableContainer component={Paper}>
@@ -55,9 +68,9 @@ const HomeUserTable = () => {
         <StyledTableHead>
           <TableRow>
             <StyledTableCell>Id_user</StyledTableCell>
-            <StyledTableCell align="center">Imię</StyledTableCell>
-            <StyledTableCell align="center">Nazwisko</StyledTableCell>
-            <StyledTableCell align="center">Email</StyledTableCell>
+            <StyledTableCell align="right">Imię</StyledTableCell>
+            <StyledTableCell align="right">Nazwisko</StyledTableCell>
+            <StyledTableCell align="right">Email</StyledTableCell>
             <StyledTableCell align="right">Data dołączenia</StyledTableCell>
           </TableRow>
         </StyledTableHead>
@@ -67,9 +80,9 @@ const HomeUserTable = () => {
               <StyledTableCell component="th" scope="row">
                 {row.id}
               </StyledTableCell>
-              <StyledTableCell align="center">{row.name}</StyledTableCell>
-              <StyledTableCell align="center">{row.surname}</StyledTableCell>
-              <StyledTableCell align="center">{row.email}</StyledTableCell>
+              <StyledTableCell align="right">{row.name}</StyledTableCell>
+              <StyledTableCell align="right">{row.surname}</StyledTableCell>
+              <StyledTableCell align="right">{row.email}</StyledTableCell>
               <StyledTableCell align="right">{row.joinDate}</StyledTableCell>
             </StyledTableRow>
           ))}
