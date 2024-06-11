@@ -2,6 +2,7 @@ import Login from "./pages/login/Login";
 import Home from "./pages/home/Home";
 import Users from "./pages/users/Users";
 import Events from "./pages/events/Events";
+import Reports from "./pages/reports/Reports";
 import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
@@ -47,7 +48,7 @@ function App() {
               }
             />
             </Route>
-            {/* <Route path="reports">
+            <Route path="reports">
             <Route
               index
               element={
@@ -56,7 +57,7 @@ function App() {
                 </RequireAuth>
               }
             />
-            </Route> */}
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

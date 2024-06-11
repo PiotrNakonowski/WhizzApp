@@ -3,36 +3,36 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import GroupIcon from '@mui/icons-material/Group';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import ReportIcon from '@mui/icons-material/Report';
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
   return (
     <div className="sidebar">
       <ul>
-        <Link to="/" style={{ textDecoration: "none" }}>
-          <li>
+        <li>
+          <NavLink exact to="/" style={{ textDecoration: "none" }}>
             <DashboardIcon className="icon" />
-            <span>Panel Główny</span>
-          </li>
-        </Link>
-        <Link to="/users" style={{ textDecoration: "none" }}>
-          <li>
+            Panel Główny
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/users" style={{ textDecoration: "none" }}>
             <GroupIcon className="icon" />
-            <span>Użytkownicy</span>
-          </li>
-        </Link>
-        <Link to="/events" style={{ textDecoration: "none" }}>
-          <li>
+            Użytkownicy
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/events" style={{ textDecoration: "none" }}>
             <EventAvailableIcon className="icon" />
-            <span>Wydarzenia</span>
-          </li>
-        </Link>
-        <Link to="/#" style={{ textDecoration: "none" }}>
-          <li>
+            Wydarzenia
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/reports" style={{ textDecoration: "none" }}>
             <ReportIcon className="icon" />
-            <span>Zgłoszenia</span>
-          </li>
-        </Link>
+            Zgłoszenia
+          </NavLink>
+        </li>
       </ul>
     </div>
   );
