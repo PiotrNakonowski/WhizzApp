@@ -105,7 +105,7 @@ const ReportTable = () => {
   };
   
   const columns = [
-    { field: 'Id_ticket', headerName: 'Id_ticket', flex: 2 },
+    { field: 'Id_report', headerName: 'Id_ticket', flex: 2 },
     { field: 'Id_user', headerName: 'Id_user', flex: 2 },
     { 
         field: 'description', 
