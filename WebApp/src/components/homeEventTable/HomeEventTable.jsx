@@ -8,7 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, limit, where } from 'firebase/firestore';
 import { db } from '../../firebase';
 import "./homeEventTable.scss";
 
@@ -48,7 +48,12 @@ const HomeEventTable = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const q = query(collection(db, 'events'),orderBy('CreatedAt', 'desc'),limit(2));
+        const q = query(
+          collection(db, 'events'),
+          orderBy('CreatedAt', 'desc'),
+          where('Approved', '==', false),
+          limit(2)
+        );
         const querySnapshot = await getDocs(q);
         const events = querySnapshot.docs.map(doc => ({
           Id_event: doc.id,
