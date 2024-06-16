@@ -11,17 +11,13 @@
     .homeContainer {
       flex: 7;
       background-color: #F0F0F0;
-      .listContainer {
-        padding: 40px;
-        //margin: 20px;
-
+      padding: 40px;
         .listTitle {
           font-weight: 700;
           color: black;
           margin-bottom: 15px;
           font-size: 24px;
         }
-      }
     }
   }
 }

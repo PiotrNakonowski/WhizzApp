@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -88,6 +89,17 @@ public class ToDoList extends AppCompatActivity {
                 finish();
             }
         });
+
+        OnBackPressedCallback callback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                Intent intent = new Intent(getApplicationContext(), Homepage.class);
+                startActivity(intent);
+                finish();
+            }
+        };
+
+        getOnBackPressedDispatcher().addCallback(this, callback);
 
         menuHandler();
 
@@ -196,7 +208,7 @@ public class ToDoList extends AppCompatActivity {
             }
         });
 
-        /*helpButton.setOnClickListener(new View.OnClickListener() {
+        helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (currentActivityClass != HelpReport.class) {
@@ -208,7 +220,7 @@ public class ToDoList extends AppCompatActivity {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
-        });*/
+        });
 
         logoutIcon.setOnClickListener(v -> logoutUser());
     }
