@@ -106,42 +106,49 @@ public class Registration extends AppCompatActivity {
         if (name.isEmpty()) {
             editTextName.setError("Pole Imię jest wymagane!");
             editTextName.requestFocus();
+            firstnameFrame.setStrokeColor(getColor(R.color.error));
             return;
         }
 
         if (surname.isEmpty()) {
             editTextSurname.setError("Pole Nazwisko jest wymagane!");
             editTextSurname.requestFocus();
+            secondnameFrame.setStrokeColor(getColor(R.color.error));
             return;
         }
 
         if (email.isEmpty()) {
             editTextEmail.setError("Pole E-mail jest wymagane!");
             editTextEmail.requestFocus();
+            emailFrame.setStrokeColor(getColor(R.color.error));
             return;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             editTextEmail.setError("Wprowadź poprawny adres e-mail!");
             editTextEmail.requestFocus();
+            emailFrame.setStrokeColor(getColor(R.color.error));
             return;
         }
 
         if (password.isEmpty()) {
             editTextPassword.setError("Pole Hasło jest wymagane!");
             editTextPassword.requestFocus();
+            passwordFrame.setStrokeColor(getColor(R.color.error));
             return;
         }
 
         if (password.length() < 6) {
             editTextPassword.setError("Hasło musi mieć co najmniej 6 znaków!");
             editTextPassword.requestFocus();
+            passwordFrame.setStrokeColor(getColor(R.color.error));
             return;
         }
 
         if (!password.equals(confirmPassword)) {
             editTextConfirmPassword.setError("Hasła nie są identyczne!");
             editTextConfirmPassword.requestFocus();
+            passwordRepeatFrame.setStrokeColor(getColor(R.color.error));
             return;
         }
 
