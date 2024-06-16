@@ -1,6 +1,7 @@
 package com.example.whizzapp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -90,6 +91,22 @@ public class HelpReport extends AppCompatActivity {
         });
 
         menuHandler();
+        setFocusChangeListenerForCard(problemFrame, R.id.problemDescription);
+    }
+
+    private void setFocusChangeListenerForCard(MaterialCardView cardView, int editTextId) {
+        EditText editText = findViewById(editTextId);
+
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    cardView.setStrokeColor(Color.parseColor("#D87648"));
+                } else {
+                    cardView.setStrokeColor(Color.parseColor("#B7B7B7"));
+                }
+            }
+        });
     }
 
     private void submitProblemReport(String problemText) {
