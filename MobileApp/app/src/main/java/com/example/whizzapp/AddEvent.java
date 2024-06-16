@@ -1,6 +1,7 @@
 package com.example.whizzapp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -97,6 +98,9 @@ public class AddEvent extends AppCompatActivity {
         });
 
         addEventButton.setOnClickListener(v -> addEvent());
+        setFocusChangeListenerForCard(inputFrameEventTitle, R.id.eventTitle);
+        setFocusChangeListenerForCard(inputFrameEventDescription, R.id.eventDescription);
+        setFocusChangeListenerForCard(inputFrameMaxAttendanceNumberInput, R.id.maxAttendanceNumberText);
     }
 
 
@@ -117,6 +121,21 @@ public class AddEvent extends AppCompatActivity {
                     Log.d("PhotoPicker", "No media selected");
                 }
 
+            }
+        });
+    }
+
+    private void setFocusChangeListenerForCard(MaterialCardView cardView, int editTextId) {
+        EditText editText = findViewById(editTextId);
+
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    cardView.setStrokeColor(Color.parseColor("#D87648"));
+                } else {
+                    cardView.setStrokeColor(Color.parseColor("#B7B7B7"));
+                }
             }
         });
     }

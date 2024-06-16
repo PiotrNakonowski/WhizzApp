@@ -160,6 +160,7 @@ public class Registration extends AppCompatActivity {
                         userData.put("surname", surname);
                         userData.put("email", email);
                         userData.put("createdAt", FieldValue.serverTimestamp());
+                        userData.put("isAdmin", false);
 
                         db.collection("users")
                                 .document(mAuth.getCurrentUser().getUid())
