@@ -110,18 +110,21 @@ public class MainActivity extends AppCompatActivity {
         if (email.isEmpty()) {
             editTextEmail.setError("Pole E-mail jest wymagane!");
             editTextEmail.requestFocus();
+            loginFrame.setStrokeColor(getColor(R.color.error));
             return;
         }
 
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             editTextEmail.setError("Wprowadź poprawny adres e-mail!");
             editTextEmail.requestFocus();
+            loginFrame.setStrokeColor(getColor(R.color.error));
             return;
         }
 
         if (password.isEmpty()) {
             editTextPassword.setError("Pole Hasło jest wymagane!");
             editTextPassword.requestFocus();
+            passwordFrame.setStrokeColor(getColor(R.color.error));
             return;
         }
 
