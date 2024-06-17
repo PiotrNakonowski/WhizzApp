@@ -165,17 +165,6 @@ public class AddEvent extends AppCompatActivity {
     private void addEvent() {
         String title = eventTitle.getText().toString().trim();
         String description = eventDescription.getText().toString().trim();
-        long maxAttendanceNumber;
-        try {
-            maxAttendanceNumber = Long.parseLong(maxAttendanceNumberInput.getText().toString().trim());
-        } catch (NumberFormatException e) {
-            maxAttendanceNumberInput.setError("Zły format liczby!");
-            maxAttendanceNumberInput.requestFocus();
-            inputFrameMaxAttendanceNumberInput.setStrokeColor(getResources().getColor(R.color.error));
-            return;
-        }
-
-        long attendance = 0;
 
         try {
             InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
@@ -184,29 +173,56 @@ public class AddEvent extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        clearAllEditTextFocus();
+
+        boolean error = false;
+
+        long maxAttendanceNumber = 0;
+        try {
+            maxAttendanceNumber = Long.parseLong(maxAttendanceNumberInput.getText().toString().trim());
+        } catch (NumberFormatException e) {
+            maxAttendanceNumberInput.setError("Zły format liczby!");
+            maxAttendanceNumberInput.requestFocus();
+            inputFrameMaxAttendanceNumberInput.setStrokeColor(getResources().getColor(R.color.error));
+            error = true;
+        }
+
+        if (!error) {
+            inputFrameMaxAttendanceNumberInput.setStrokeColor(getResources().getColor(R.color.input_color));
+        }
+
+        long attendance = 0;
 
         if (title.isEmpty()) {
             eventTitle.setError("Pole Tytuł jest wymagane!");
             eventTitle.requestFocus();
             inputFrameEventTitle.setStrokeColor(getResources().getColor(R.color.error));
-            return;
+            error = true;
+        } else {
+            inputFrameEventTitle.setStrokeColor(getResources().getColor(R.color.input_color));
         }
 
         if (description.isEmpty()) {
             eventDescription.setError("Pole Opis jest wymagane!");
             eventDescription.requestFocus();
             inputFrameEventDescription.setStrokeColor(getResources().getColor(R.color.error));
-            return;
+            error = true;
+        } else {
+            inputFrameEventDescription.setStrokeColor(getResources().getColor(R.color.input_color));
         }
 
         if (uri == null) {
             addPhotoText.setError("Zdjęcie jest wymagane!");
             addPhotoText.requestFocus();
             inputFramePhoto.setStrokeColor(getResources().getColor(R.color.error));
-            return;
+            error = true;
+        } else {
+            addPhotoText.setError(null);
+            inputFramePhoto.setStrokeColor(getResources().getColor(R.color.input_color));
         }
 
+        if (error) {
+            return;
+        }
 
         long finalMaxAttendanceNumber = maxAttendanceNumber;
         Random random = new Random();
@@ -274,7 +290,7 @@ public class AddEvent extends AppCompatActivity {
 
     private void clearAllEditTextFocus() {
         View currentFocus = getCurrentFocus();
-        if (currentFocus != null && currentFocus instanceof EditText) {
+        if (currentFocus != null) {
             currentFocus.clearFocus();
         }
     }

@@ -192,6 +192,8 @@
 
             <TextView
                 android:id="@+id/addPhotoText"
+                android:focusableInTouchMode="true"
+                android:focusable="true"
                 android:layout_width="161dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|end"
@@ -203,7 +205,8 @@
                 android:text="Brak pliku"
                 android:textColor="#BBBBBB"
                 android:textColorHint="#BBBBBB"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                />
 
 
         </com.google.android.material.card.MaterialCardView>
