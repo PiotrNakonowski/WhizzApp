@@ -1,10 +1,10 @@
 .login-container {
     height: 100vh;
     display: flex;
-    flex-direction: column; /* Dodaliśmy flex-direction: column aby umożliwić wyśrodkowanie elementów */
+    flex-direction: column; 
     align-items: center;
     justify-content: center;
-    background-color: #F2F2F2; /* tło szare */
+    background-color: #F2F2F2; 
   
     .logo {
       width: 250px;
@@ -17,16 +17,17 @@
     }
   
     .form-container {
-      background-color: #D9D9D9; /* tło formularza */
-      border-radius: 20px; /* zaokrąglenie rogów formularza */
-      padding: 30px; /* wewnętrzny odstęp */
-      width: 300px; /* szerokość formularza */
+      background-color: #D9D9D9; 
+      border-radius: 20px; 
+      padding: 30px; 
+      width: 300px; 
       margin-bottom: 100px;
   
       .formTitle {
-        font-size: 24px; /* Rozmiar tekstu */
-        margin-bottom: 15px; /* Odstęp od góry */
+        font-size: 24px; 
+        margin-bottom: 15px; 
         text-align: center;
+        letter-spacing: 1px;
       }
   
       form {
@@ -37,32 +38,41 @@
         .input-field {
           caret-color: transparent;
           width: 80%;
-          height: 30px;
+          height: 36px;
           margin: 10px 0;
-          border: 2px solid #B7B7B7; /* obramowanie pól wejściowych */
-          border-radius: 12px; /* zaokrąglenie rogów pól wejściowych */
-          padding: 5px; /* wewnętrzny odstęp wewnątrz pól wejściowych */
-          font-size: 20px;
+          border: 2px solid #B7B7B7; 
+          border-radius: 12px; 
+          padding: 5px; 
+          font-size: 18px;
+          letter-spacing: 1px;
           padding-left: 10px;
-        }
-        .input-field::placeholder {
+          outline: none;
+          
+          &::placeholder {
             padding-left: 10px;
-            color: #BBBBBB; /* kolor placeholdera */
+            color: #BBBBBB; 
             font-size: 16px;
-            font-weight: 700; /* rozmiar czcionki */
+            font-weight: 700; 
+          }
+          &:focus {
+            border: 2px solid #434343;
+            caret-color: auto;
+          }
         }
+        
   
         .login-button {
           width: 104px;
-          height: 36px; /* Zmniejszono wysokość przycisku */
-          margin-top: 10px; /* Dodano odstęp od góry */
+          height: 36px; 
+          margin-top: 10px; 
           border: none;
-          background-color: #d87648; /* kolor przycisku */
+          background-color: #d87648; 
           color: white;
-          font-weight: bold;
+          font-weight: 500;
           cursor: pointer;
-          border-radius: 5px; /* zaokrąglenie rogów przycisku */
+          border-radius: 5px; 
           font-size: 18px;
+          letter-spacing: 1px;
         }
   
         span {

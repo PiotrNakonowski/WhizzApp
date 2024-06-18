@@ -20,7 +20,6 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 16,
-    border: 0,
   },
 }));
 
@@ -40,6 +39,8 @@ const StyledTableHead = styled(TableHead)({
 
 const StyledTableContainer = styled(TableContainer)({
   marginBottom: '35px',
+    boxShadow: 'none',
+    border: '1px #e0e0e0 solid',
 });
 
 const HomeReportTable = () => {

@@ -18,6 +18,7 @@ const StyledTableContainer = styled(Paper)({
   marginBottom: '20px',
   height: 700,
   width: '100%',
+  boxShadow: 'none',
 });
 
 const StyledDataGrid = styled(DataGrid)(() => ({
@@ -77,9 +78,11 @@ const UserTable = () => {
       try {
         const querySnapshot = await getDocs(collection(db, "users"));
         querySnapshot.forEach((doc) => {
-          const data = doc.data();
-          const createdAt = data.createdAt ? data.createdAt.toDate().toISOString().split('T')[0] : '';
-          list.push({ id: doc.id, ...data, createdAt });
+            const data = doc.data();
+            if (!data.isAdmin) {
+            const createdAt = data.createdAt ? data.createdAt.toDate().toISOString().split('T')[0] : '';
+            list.push({ id: doc.id, ...data, createdAt });
+          }
         });
         setData(list);
       } catch (err) {

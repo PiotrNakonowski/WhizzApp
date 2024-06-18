@@ -25,7 +25,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(() => ({
-  '&:nth-of-type(odd)': {
+  '&:nth-of-type(even)': {
     backgroundColor: '#EDEDED',
   },
   '&:last-child td, &:last-child th': {
@@ -40,6 +40,8 @@ const StyledTableHead = styled(TableHead)({
 
 const StyledTableContainer = styled(TableContainer)({
   marginBottom: '35px',
+  boxShadow: 'none',
+  border: '1px #e0e0e0 solid',
 });
 
 const HomeEventTable = () => {
@@ -72,8 +74,8 @@ const HomeEventTable = () => {
   }, []);
 
   return (
-    <StyledTableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }}  aria-label="customized table">
+    <StyledTableContainer component={Paper} style={{ height: 'auto' }}>
+      <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <StyledTableHead>
           <TableRow>
             <StyledTableCell style={{ width: '10%' }}>Id_event</StyledTableCell>
@@ -84,17 +86,25 @@ const HomeEventTable = () => {
           </TableRow>
         </StyledTableHead>
         <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.Id_event}>
-              <StyledTableCell component="th" scope="row">
-                {row.Id_event}
+          {rows.length === 0 ? (
+            <StyledTableRow>
+              <StyledTableCell colSpan={5} align="center">
+                Brak nowych wydarzeń
               </StyledTableCell>
-              <StyledTableCell align="center">{row.Id_user}</StyledTableCell>
-              <StyledTableCell align="center">{row.title}</StyledTableCell>
-              <StyledTableCell align="center" style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis'/*to ostanie dodaje kropki*/}}>{row.description}</StyledTableCell>
-              <StyledTableCell align="right">{row.date}</StyledTableCell>
             </StyledTableRow>
-          ))}
+          ) : (
+            rows.map((row) => (
+              <StyledTableRow key={row.Id_event}>
+                <StyledTableCell component="th" scope="row">
+                  {row.Id_event}
+                </StyledTableCell>
+                <StyledTableCell align="center">{row.Id_user}</StyledTableCell>
+                <StyledTableCell align="center">{row.title}</StyledTableCell>
+                <StyledTableCell align="center" style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis'/*to ostanie dodaje kropki*/}}>{row.description}</StyledTableCell>
+                <StyledTableCell align="right">{row.date}</StyledTableCell>
+              </StyledTableRow>
+            ))
+          )}
         </TableBody>
       </Table>
     </StyledTableContainer>

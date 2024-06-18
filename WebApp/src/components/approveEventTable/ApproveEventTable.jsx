@@ -7,12 +7,13 @@ import Paper from '@mui/material/Paper';
 import { collection, getDocs, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 
-const StyledTableContainer = styled(Paper)({
+const StyledTableContainer = styled(Paper)(({hasRows}) => ({
   backgroundColor: 'white',
   marginBottom: '20px',
-  height: 500,
+  height: hasRows ? 500 : 325,
   width: '100%',
-});
+  boxShadow: 'none',
+}));
 
 const StyledDataGrid = styled(DataGrid)(() => ({
   '& .MuiDataGrid-columnHeaderTitleContainer .MuiButtonBase-root': {
@@ -21,6 +22,7 @@ const StyledDataGrid = styled(DataGrid)(() => ({
   },
   '& .MuiDataGrid-root': {
     backgroundColor: '#D1CBCB',
+    ShadowRoot: 'none',
   },
   '& .MuiDataGrid-columnSeparator': {
     display: 'none',
@@ -172,6 +174,9 @@ const ApproveEventTable = () => {
           },
         }}
         disableSelectionOnClick
+        localeText={{
+          noRowsLabel: 'Brak nowych wydarzeń',
+        }}
       />
     </StyledTableContainer>
   );
