@@ -12,6 +12,7 @@ const StyledTableContainer = styled(Paper)({
   marginBottom: '20px',
   height: 700,
   width: '100%',
+  boxShadow: 'none',
 });
 
 const StyledDataGrid = styled(DataGrid)(() => ({

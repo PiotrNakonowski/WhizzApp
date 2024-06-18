@@ -33,7 +33,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.storage.FirebaseStorage;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -51,6 +50,7 @@ public class SchoolSchedule extends AppCompatActivity {
     private String userID;
     private int i = 0;
     private ArrayList<String> namesOfFiles;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,10 +152,7 @@ public class SchoolSchedule extends AppCompatActivity {
                     cardView.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
                     cardView.setStrokeColor(getColor(R.color.primary));
 
-                    ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(
-                            convertDpToPixel(186, this),
-                            convertDpToPixel(32, this)
-                    );
+                    ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(convertDpToPixel(186, this), convertDpToPixel(32, this));
                     marginLayoutParams.setMargins(convertDpToPixel(20, this), convertDpToPixel(100 + (i * 181) + (i * 32), this), 0, 0);
                     cardView.setLayoutParams(marginLayoutParams);
 
@@ -163,10 +160,7 @@ public class SchoolSchedule extends AppCompatActivity {
                     textView.setTextColor(getResources().getColor(R.color.black));
                     float textSizeInSp = 16;
                     textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSizeInSp);
-                    ViewGroup.LayoutParams textLayoutParams = new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT
-                    );
+                    ViewGroup.LayoutParams textLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     textView.setLayoutParams(textLayoutParams);
                     textView.setText("Plan na " + convertDayToPolish(day));
                     textView.setGravity(Gravity.CENTER);
@@ -184,26 +178,17 @@ public class SchoolSchedule extends AppCompatActivity {
                     imageCardView.setCardBackgroundColor(ContextCompat.getColor(this, R.color.secondary_background));
                     imageCardView.setStrokeWidth(convertDpToPixel(2, getApplicationContext()));
                     imageCardView.setStrokeColor(getColor(R.color.primary));
-                    ViewGroup.MarginLayoutParams secondMarginLayoutParams = new ViewGroup.MarginLayoutParams(
-                            convertDpToPixel(screenWidthInDp - 40, this),
-                            convertDpToPixel(159, this)
-                    );
+                    ViewGroup.MarginLayoutParams secondMarginLayoutParams = new ViewGroup.MarginLayoutParams(convertDpToPixel(screenWidthInDp - 40, this), convertDpToPixel(159, this));
                     secondMarginLayoutParams.setMargins(convertDpToPixel(20, this), convertDpToPixel(143 + (i * 54 + (i * 159)), this), 0, convertDpToPixel(10, getApplicationContext()));
                     imageCardView.setLayoutParams(secondMarginLayoutParams);
 
                     ImageView scheduleImage = new ImageView(this);
-                    ViewGroup.LayoutParams imageLayoutParams = new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT
-                    );
+                    ViewGroup.LayoutParams imageLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     scheduleImage.setLayoutParams(imageLayoutParams);
                     scheduleImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
                     ImageView biggerScheduleImage = new ImageView(this);
-                    ViewGroup.LayoutParams biggerLayoutParams = new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT
-                    );
+                    ViewGroup.LayoutParams biggerLayoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     biggerScheduleImage.setLayoutParams(biggerLayoutParams);
                     biggerScheduleImage.setVisibility(View.GONE);
 
@@ -243,7 +228,7 @@ public class SchoolSchedule extends AppCompatActivity {
                             dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                                 @Override
                                 public void onShow(DialogInterface dialogInterface) {
-                                    Button button = ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE);
+                                    Button button = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
                                     button.setBackgroundColor(getResources().getColor(R.color.secondary_background));
                                     button.setTextColor(getResources().getColor(R.color.primary));
                                     Typeface typeface = ResourcesCompat.getFont(getApplicationContext(), R.font.open_sans_bold);
@@ -316,8 +301,7 @@ public class SchoolSchedule extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), Homepage.class);
                     startActivity(intent);
                     finish();
-                }
-                else {
+                } else {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
@@ -330,8 +314,7 @@ public class SchoolSchedule extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), SchoolSchedule.class);
                     startActivity(intent);
                     finish();
-                }
-                else {
+                } else {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
@@ -344,8 +327,7 @@ public class SchoolSchedule extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), NavigationMap.class);
                     startActivity(intent);
                     finish();
-                }
-                else {
+                } else {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
@@ -358,8 +340,7 @@ public class SchoolSchedule extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), ToDoList.class);
                     startActivity(intent);
                     finish();
-                }
-                else {
+                } else {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
@@ -372,8 +353,7 @@ public class SchoolSchedule extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), Events.class);
                     startActivity(intent);
                     finish();
-                }
-                else {
+                } else {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
@@ -386,8 +366,7 @@ public class SchoolSchedule extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), HelpReport.class);
                     startActivity(intent);
                     finish();
-                }
-                else {
+                } else {
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
             }
